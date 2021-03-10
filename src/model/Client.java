@@ -9,7 +9,61 @@ public class Client {
 	private String observations;
 	
 	public Client (String name, String surname, int iD, String address, int phoneNumber, String observations) {
-		
+		this.name = name;
+		this.surname = surname;
+		this.iD = iD;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.observations = observations;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public int getiD() {
+		return iD;
+	}
+
+	public void setiD(int iD) {
+		this.iD = iD;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(int phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getObservations() {
+		return observations;
+	}
+
+	public void setObservations(String observations) {
+		this.observations = observations;
+	}
+	
 
 }
