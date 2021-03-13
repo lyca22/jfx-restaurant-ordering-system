@@ -2,9 +2,10 @@ package model;
 
 public class ProductType {
 	
-	String name;
-	User userWhoCreatedPT;
-	User userWhoModifiedPT;
+	private String name;
+	private User userWhoCreatedPT;
+	private User userWhoModifiedPT;
+	
 	public ProductType(String name, User userWhoCreatedPT, User userWhoModifiedPT) {
 		this.name = name;
 		this.userWhoCreatedPT = userWhoCreatedPT;
