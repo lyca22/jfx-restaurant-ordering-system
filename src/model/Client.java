@@ -1,32 +1,27 @@
 package model;
 
-public class Client {
-	
+public class Client implements Comparable<Client>{
 	
 	private String name;
 	private String surname;
-	private int iD;
+	private int ID;
 	private String address;
 	private int phoneNumber;
 	private String observations;
-	private User user;
+	private User userWhoCreated;
+	private User lastUserWhoModified;
+	private boolean disabled;
 	
-	public Client (String name, String surname, int iD, String address, int phoneNumber, String observations, User user) {
+	public Client (String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
 		this.name = name;
 		this.surname = surname;
-		this.iD = iD;
+		this.ID = ID;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.observations = observations;
-		this.user = user;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+		userWhoCreated = user;
+		lastUserWhoModified = user;
+		disabled = false;
 	}
 
 	public String getName() {
@@ -45,12 +40,12 @@ public class Client {
 		this.surname = surname;
 	}
 
-	public int getiD() {
-		return iD;
+	public int getID() {
+		return ID;
 	}
 
-	public void setiD(int iD) {
-		this.iD = iD;
+	public void setID(int iD) {
+		ID = iD;
 	}
 
 	public String getAddress() {
@@ -76,6 +71,34 @@ public class Client {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
-	
 
+	public User getUserWhoCreated() {
+		return userWhoCreated;
+	}
+
+	public void setUserWhoCreated(User userWhoCreated) {
+		this.userWhoCreated = userWhoCreated;
+	}
+
+	public User getLastUserWhoModified() {
+		return lastUserWhoModified;
+	}
+
+	public void setLastUserWhoModified(User lastUserWhoModified) {
+		this.lastUserWhoModified = lastUserWhoModified;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	@Override
+	public int compareTo(Client o) {
+		return name.compareTo(o.getName());
+	}
+	
 }

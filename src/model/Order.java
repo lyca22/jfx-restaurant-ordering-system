@@ -2,26 +2,30 @@ package model;
 
 import java.util.List;
 
-public class Order {
+public class Order implements Comparable<Order>{
 	
 	private int orderCode;
 	private OrderState orderState;
 	private List<Product> products;
 	private List<Integer> quantity;
 	private Client client;
-	private Employee employeeWhoServed;
+	private Employee employeeWhoDelivered;
 	private Date date;
 	private String observations;
+	private User userWhoCreated;
+	private User lastUserWhoModified;
 	
-	public Order(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoServed, Date date, String observations) {
+	public Order(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, Date date, String observations, User user) {
 		setOrderCode(orderCode);
 		setOrderState(OrderState.Requested);
 		setProducts(products);
 		setQuantity(quantity);
 		setClient(client);
-		setEmployeeWhoServed(employeeWhoServed);
+		setEmployeeWhoDelivered(employeeWhoDelivered);
 		setDate(date);
 		setObservations(observations);
+		userWhoCreated = user;
+		lastUserWhoModified = user;
 	}
 
 	public int getOrderCode() {
@@ -64,12 +68,12 @@ public class Order {
 		this.client = client;
 	}
 
-	public Employee getEmployeeWhoServed() {
-		return employeeWhoServed;
+	public Employee getEmployeeWhoDelivered() {
+		return employeeWhoDelivered;
 	}
 
-	public void setEmployeeWhoServed(Employee employeeWhoServed) {
-		this.employeeWhoServed = employeeWhoServed;
+	public void setEmployeeWhoDelivered(Employee employeeWhoDelivered) {
+		this.employeeWhoDelivered = employeeWhoDelivered;
 	}
 
 	public Date getDate() {
@@ -86,6 +90,27 @@ public class Order {
 
 	public void setObservations(String observations) {
 		this.observations = observations;
+	}
+
+	public User getUserWhoCreated() {
+		return userWhoCreated;
+	}
+
+	public void setUserWhoCreated(User userWhoCreated) {
+		this.userWhoCreated = userWhoCreated;
+	}
+
+	public User getLastUserWhoModified() {
+		return lastUserWhoModified;
+	}
+
+	public void setLastUserWhoModified(User lastUserWhoModified) {
+		this.lastUserWhoModified = lastUserWhoModified;
+	}
+
+	@Override
+	public int compareTo(Order o) {
+		return orderCode - o.getOrderCode();
 	}
 	
 }

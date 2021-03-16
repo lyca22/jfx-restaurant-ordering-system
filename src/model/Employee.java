@@ -1,14 +1,17 @@
 package model;
 
-public class Employee {
+public class Employee implements Comparable<Employee>{
+	
 	private String name;
 	private String surname;
-	private int iD;
+	private int ID;
+	private boolean disabled;
 	
-	public Employee(String name, String surname, int iD) {
+	public Employee(String name, String surname, int ID) {
 		this.name = name;
 		this.surname = surname;
-		this.iD = iD;
+		this.ID = ID;
+		disabled = false;
 	}
 
 	public String getName() {
@@ -27,14 +30,25 @@ public class Employee {
 		this.surname = surname;
 	}
 
-	public int getiD() {
-		return iD;
+	public int getID() {
+		return ID;
 	}
 
-	public void setiD(int iD) {
-		this.iD = iD;
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		return name.compareTo(o.getName());
 	}
 	
-	
-
 }

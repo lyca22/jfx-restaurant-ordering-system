@@ -2,20 +2,26 @@ package model;
 
 import java.util.List;
 
-public class Product {
+public class Product implements Comparable<Product>{
 
 	private String name;
 	private ProductType productType;
 	private List<Ingredient> ingredients;
 	private ProductSize productSize;
 	private int price;
+	private User userWhoCreated;
+	private User lastUserWhoModified;
+	private boolean disabled;
 	
-	public Product(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price) {
+	public Product(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
 		this.name = name;
 		this.productType = productType;
 		this.ingredients = ingredients;
 		this.productSize = productSize;
 		this.price = price;
+		userWhoCreated = user;
+		lastUserWhoModified = user;
+		disabled = false;
 	}
 
 	public String getName() {
@@ -57,7 +63,34 @@ public class Product {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	
-	
+
+	public User getUserWhoCreated() {
+		return userWhoCreated;
+	}
+
+	public void setUserWhoCreated(User userWhoCreated) {
+		this.userWhoCreated = userWhoCreated;
+	}
+
+	public User getLastUserWhoModified() {
+		return lastUserWhoModified;
+	}
+
+	public void setLastUserWhoModified(User lastUserWhoModified) {
+		this.lastUserWhoModified = lastUserWhoModified;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		return name.compareTo(o.getName());
+	}
 	
 }

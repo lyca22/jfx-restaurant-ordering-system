@@ -1,35 +1,53 @@
 package model;
 
-public class ProductType {
+public class ProductType implements Comparable<ProductType>{
 	
 	private String name;
-	private User userWhoCreatedPT;
-	private User userWhoModifiedPT;
+	private User userWhoCreated;
+	private User lastUserWhoModified;
+	private boolean disabled;
 	
-	public ProductType(String name, User userWhoCreatedPT, User userWhoModifiedPT) {
+	public ProductType(String name, User user) {
 		this.name = name;
-		this.userWhoCreatedPT = userWhoCreatedPT;
-		this.userWhoModifiedPT = userWhoModifiedPT;
+		userWhoCreated = user;
+		lastUserWhoModified = user;
+		disabled = false;
 	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public User getUserWhoCreatedPT() {
-		return userWhoCreatedPT;
-	}
-	public void setUserWhoCreatedPT(User userWhoCreatedPT) {
-		this.userWhoCreatedPT = userWhoCreatedPT;
-	}
-	public User getUserWhoModifiedPT() {
-		return userWhoModifiedPT;
-	}
-	public void setUserWhoModifiedPT(User userWhoModifiedPT) {
-		this.userWhoModifiedPT = userWhoModifiedPT;
-	}
-	
-	
 
+	public User getUserWhoCreated() {
+		return userWhoCreated;
+	}
+
+	public void setUserWhoCreated(User userWhoCreated) {
+		this.userWhoCreated = userWhoCreated;
+	}
+
+	public User getLastUserWhoModified() {
+		return lastUserWhoModified;
+	}
+
+	public void setLastUserWhoModified(User lastUserWhoModified) {
+		this.lastUserWhoModified = lastUserWhoModified;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	@Override
+	public int compareTo(ProductType o) {
+		return name.compareTo(o.getName());
+	}
+	
 }
