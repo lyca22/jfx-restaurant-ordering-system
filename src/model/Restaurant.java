@@ -36,6 +36,7 @@ public class Restaurant {
 	private ArrayList<Employee> employees;
 	private ArrayList<User> users;
 	private ArrayList<Order> orders;
+	
 	public Restaurant(String name, String address) {
 		this.name = name;
 		this.address = address;
@@ -115,6 +116,10 @@ public class Restaurant {
 		this.orders = orders;
 	}
 
+	
+	
+	//Add methods
+	
 	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
 		Product product = new Product(name, productType, ingredients, productSize, price, user);
 		products.add(product);
@@ -156,7 +161,11 @@ public class Restaurant {
 		orders.add(order);
 		Collections.sort(orders);
 	}
+	
+	
 
+	//Delete methods
+	
 	public void deleteProduct(Product product) {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
@@ -256,6 +265,10 @@ public class Restaurant {
 		orders.remove(order);
 	}
 
+	
+	
+	//Update methods
+	
 	public void updateProduct(Product product, String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User lastUserWhoModified) {
 		product.setName(name);
 		product.setProductType(productType);
@@ -306,6 +319,10 @@ public class Restaurant {
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
 	}
+	
+	
+	
+	//Disable methods
 
 	public void disableProduct(Product product, boolean option) {
 		product.setDisabled(option);
@@ -330,7 +347,11 @@ public class Restaurant {
 	public void disableUser(User user, boolean option) {
 		user.setDisabled(option);
 	}
+	
+	
 
+	//Generate reports methods
+	
 	public void generateOrderReport(String fileName, String separator) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
 		
@@ -354,7 +375,10 @@ public class Restaurant {
 		
 		pw.close();
 	}
+	
 
+	//Import methods
+	
 	public void importClientData(String fileName) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		
@@ -378,6 +402,10 @@ public class Restaurant {
 		
 		br.close();
 	}
+	
+	
+	
+	//Save methods
 
 	public void saveName() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(NAME_FILE_NAME));
@@ -432,7 +460,10 @@ public class Restaurant {
 		oos.writeObject(name);
 	    oos.close();
 	}
+	
 
+	//Load methods
+	
 	public boolean loadName() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(NAME_FILE_NAME);
 		boolean loaded = false;
