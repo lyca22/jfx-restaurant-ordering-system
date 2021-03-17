@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FAD7A0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane VBox.vgrow="ALWAYS">
         <columnConstraints>
@@ -23,9 +23,9 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="Create your account">
+                  <Label text="Crea tu cuenta" textFill="#eb984e">
                      <font>
-                        <Font size="36.0" />
+                        <Font name="Lucida Sans Regular" size="44.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="15.0" />
@@ -33,7 +33,7 @@
                   </Label>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
                      <children>
-                        <Label text="Name:">
+                        <Label text="Nombre:">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -50,7 +50,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
                      <children>
-                        <Label text="Surname:">
+                        <Label text="Apellido:">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -78,10 +78,13 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
                      <children>
-                        <Label text="Username:">
+                        <Label text="Nombre de usuario:">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
+                           <font>
+                              <Font size="11.0" />
+                           </font>
                         </Label>
                         <TextField>
                            <HBox.margin>
@@ -92,10 +95,13 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
                      <children>
-                        <Label text="Password:">
+                        <Label text="Contraseña:">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
                         </Label>
                         <TextField>
                            <HBox.margin>
@@ -106,15 +112,21 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Sign In">
+                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="89.0" style="-fx-background-color: #EB984E;" text="Ingresar">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
                         </Button>
-                        <Button mnemonicParsing="false" text="Create Account">
+                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="120.0" style="-fx-background-color: #F5B041;" text="Crear Cuenta">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
                         </Button>
                      </children>
                      <VBox.margin>
