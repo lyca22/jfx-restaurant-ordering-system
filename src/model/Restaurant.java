@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Restaurant {
@@ -296,7 +297,7 @@ public class Restaurant {
 		user.setPassword(password);
 	}
 
-	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, Date date, String observations, User lastUserWhoModified) {
+	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User lastUserWhoModified) {
 		order.setOrderCode(orderCode);
 		order.setProducts(products);
 		order.setQuantity(quantity);
