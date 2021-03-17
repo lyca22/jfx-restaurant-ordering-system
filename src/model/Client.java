@@ -100,5 +100,14 @@ public class Client implements Comparable<Client>{
 	public int compareTo(Client o) {
 		return name.compareTo(o.getName());
 	}
+
+	@Override
+	public String toString() {
+		return "Client [name=" + name + ", surname=" + surname + ", ID=" + ID + ", address=" + address
+				+ ", phoneNumber=" + phoneNumber + ", observations=" + observations + ", userWhoCreated="
+				+ userWhoCreated + ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
+	}
+	
+	
 	
 }

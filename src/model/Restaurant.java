@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -116,7 +117,12 @@ public class Restaurant {
 		this.orders = orders;
 	}
 
+	//Sort Methods
 	
+		public void sortBySurnameClient() {
+			Comparator<Client> clientComparator = new ClientSurnameComparator();
+			Collections.sort(clients, clientComparator);
+		}
 	
 	//Add methods
 	
@@ -141,8 +147,9 @@ public class Restaurant {
 	public void addClient(String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
 		Client client = new Client(name, surname, ID, address, phoneNumber, observations, user);
 		clients.add(client);
-		Collections.sort(clients);
+		sortBySurnameClient();
 	}
+	
 
 	public void addEmployee(String name, String surname, int ID) {
 		Employee employee = new Employee(name, surname, ID);
