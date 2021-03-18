@@ -1,6 +1,6 @@
 package model;
 
-public class Client implements Comparable<Client>{
+public class Client {
 	
 	private String name;
 	private String surname;
@@ -96,10 +96,7 @@ public class Client implements Comparable<Client>{
 		this.disabled = disabled;
 	}
 
-	@Override
-	public int compareTo(Client o) {
-		return name.compareTo(o.getName());
-	}
+	
 
 	@Override
 	public String toString() {

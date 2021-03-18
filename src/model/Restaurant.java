@@ -119,9 +119,36 @@ public class Restaurant {
 
 	//Sort Methods
 	
-		public void sortBySurnameClient() {
-			Comparator<Client> clientComparator = new ClientSurnameComparator();
+		public void sortClientBySurnameAndName() {
+			Comparator<Client> clientComparator = new ClientSurnameAndNameComparator();
 			Collections.sort(clients, clientComparator);
+		}
+		
+		public void sortProductByInsertion(ArrayList<Product> array) {
+			for(int i=1;i<array.size(); i++) {
+				for(int j=i; j>0 && array.get(j-1).getPrice()>array.get(j).getPrice();j--) {
+					Product temp = array.get(j);
+					array.set(j,array.get(j-1));
+					array.set(j-1,temp);
+				}
+		
+			}
+		}
+		
+		public void sortIngredientBySelection(ArrayList<Ingredient> array) {
+			for (int i = 0; i < array.size(); i++) {
+				String min = array.get(i).getName();
+				
+				for(int j=i+1; j<array.size();j++) {
+					if(array.get(j).getName().compareTo(min)>0) {
+						String temp = array.get(j).getName();
+						array.get(j).setName(min);
+						min = temp;
+					}
+				}
+				array.get(i).setName(min);
+				
+			}
 		}
 	
 	//Add methods
@@ -129,7 +156,7 @@ public class Restaurant {
 	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
 		Product product = new Product(name, productType, ingredients, productSize, price, user);
 		products.add(product);
-		Collections.sort(products);
+		sortProductByInsertion(products);
 	}
 
 	public void addProductType(String name, User user) {
@@ -141,13 +168,13 @@ public class Restaurant {
 	public void addIngredient(String name, User user) {
 		Ingredient ingredient = new Ingredient(name, user);
 		ingredients.add(ingredient);
-		Collections.sort(ingredients);
+		sortIngredientBySelection(ingredients);
 	}
 
 	public void addClient(String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
 		Client client = new Client(name, surname, ID, address, phoneNumber, observations, user);
 		clients.add(client);
-		sortBySurnameClient();
+		sortClientBySurnameAndName();
 	}
 	
 

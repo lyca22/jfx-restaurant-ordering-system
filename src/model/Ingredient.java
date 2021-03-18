@@ -50,5 +50,13 @@ public class Ingredient implements Comparable<Ingredient>{
 	public int compareTo(Ingredient o) {
 		return name.compareTo(o.getName());
 	}
+
+	@Override
+	public String toString() {
+		return "Ingredient [name=" + name + ", userWhoCreated=" + userWhoCreated + ", lastUserWhoModified="
+				+ lastUserWhoModified + ", disabled=" + disabled + "]\n";
+	}
+	
+	
 	
 }

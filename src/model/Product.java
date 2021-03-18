@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Product implements Comparable<Product>{
+public class Product {
 
 	private String name;
 	private ProductType productType;
@@ -89,8 +89,12 @@ public class Product implements Comparable<Product>{
 	}
 
 	@Override
-	public int compareTo(Product o) {
-		return name.compareTo(o.getName());
+	public String toString() {
+		return "Product [name=" + name + ", productType=" + productType + ", ingredients=" + ingredients
+				+ ", productSize=" + productSize + ", price=" + price + ", userWhoCreated=" + userWhoCreated
+				+ ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
+
+	
 	
 }
