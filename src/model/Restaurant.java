@@ -215,7 +215,9 @@ public class Restaurant {
 		if(users.size() == 0 || user == null) {
 			User newUser = new User(name, surname, iD, username, password);
 			users.add(newUser);
+			employees.add(newUser);
 			Collections.sort(users);
+			Collections.sort(employees);
 		}
 	}
 

@@ -3,15 +3,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<TableView fx:id="tvOrders" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
   <columns>
-    <TableColumn minWidth="100.0" prefWidth="100.0" text="Código" />
-    <TableColumn minWidth="140.0" prefWidth="140.0" text="Estado" />
-      <TableColumn minWidth="190.0" prefWidth="190.0" text="Productos" />
-      <TableColumn minWidth="150.0" prefWidth="150.0" text="Cantidad" />
-      <TableColumn minWidth="180.0" prefWidth="180.0" text="Cliente" />
-      <TableColumn minWidth="180.0" prefWidth="180.0" text="Empleado que entrega" />
-      <TableColumn minWidth="150.0" prefWidth="150.0" text="Fecha y hora" />
-      <TableColumn minWidth="170.0" prefWidth="170.0" text="Observaciones" />
+    <TableColumn fx:id="tcOrderCode" minWidth="100.0" prefWidth="100.0" text="Código" />
+    <TableColumn fx:id="tcOrderStatus" minWidth="140.0" prefWidth="140.0" text="Estado" />
+      <TableColumn fx:id="tcOrderProducts" minWidth="190.0" prefWidth="190.0" text="Productos" />
+      <TableColumn fx:id="tcOrderQuantity" minWidth="150.0" prefWidth="150.0" text="Cantidad" />
+      <TableColumn fx:id="tcOrderClient" minWidth="180.0" prefWidth="180.0" text="Cliente" />
+      <TableColumn fx:id="tcOrderEmployee" minWidth="180.0" prefWidth="180.0" text="Empleado que entrega" />
+      <TableColumn fx:id="tcOrderDate" minWidth="150.0" prefWidth="150.0" text="Fecha y hora" />
+      <TableColumn fx:id="tcOrderObservations" minWidth="170.0" prefWidth="170.0" text="Observaciones" />
   </columns>
 </TableView>

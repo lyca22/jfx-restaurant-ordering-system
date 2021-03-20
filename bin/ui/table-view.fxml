@@ -16,12 +16,12 @@
         <menus>
           <Menu mnemonicParsing="false" text="Ver">
             <items>
-              <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Ingredientes" />
-                  <MenuItem mnemonicParsing="false" text="Clientes" />
-                  <MenuItem mnemonicParsing="false" text="Empleados" />
-                  <MenuItem mnemonicParsing="false" text="Usuarios" />
-                  <MenuItem mnemonicParsing="false" text="Órdenes" />
+              <MenuItem mnemonicParsing="false" onAction="#viewProducts" text="Productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewIngredients" text="Ingredientes" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewClients" text="Clientes" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewEmployees" text="Empleados" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewUsers" text="Usuarios" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewOrders" text="Órdenes" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Agregar">
@@ -51,7 +51,7 @@
             <Menu mnemonicParsing="false" text="Cerrar sesión" />
         </menus>
       </MenuBar>
-      <GridPane VBox.vgrow="ALWAYS">
+      <GridPane fx:id="tablePane" VBox.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>

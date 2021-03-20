@@ -50,6 +50,11 @@ public class RestaurantGUI {
 	@FXML
 	private PasswordField txtRegisterPassword;
 
+	//Table pane.
+	
+	@FXML
+	private GridPane tablePane;
+
 	//Product list.
 
 	@FXML
@@ -173,7 +178,32 @@ public class RestaurantGUI {
 		this.restaurant = restaurant;
 	}
 
-	@SuppressWarnings("unused")
+	public void loadScreen(String resource) {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+		fxmlLoader.setController(this);
+		Parent loginPane;
+		try {
+			loginPane = fxmlLoader.load();
+			mainPane.getChildren().clear();
+			mainPane.add(loginPane, 0, 0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loadTable(String resource) {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+		fxmlLoader.setController(this);
+		Parent loginPane;
+		try {
+			loginPane = fxmlLoader.load();
+			tablePane.getChildren().clear();
+			tablePane.add(loginPane, 0, 0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void initializeProductsTableView() {
 		ObservableList<model.Product> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getProducts());
@@ -186,7 +216,6 @@ public class RestaurantGUI {
 
 	}
 
-	@SuppressWarnings("unused")
 	private void initializeIngredientsTableView() {
 		ObservableList<model.Ingredient> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getIngredients());
@@ -194,7 +223,6 @@ public class RestaurantGUI {
 		tcIngredientName.setCellValueFactory(new PropertyValueFactory<model.Ingredient, String>("name"));
 	}
 
-	@SuppressWarnings("unused")
 	private void initializeClientsTableView() {
 		ObservableList<model.Client> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getClients());
@@ -207,7 +235,6 @@ public class RestaurantGUI {
 		tcClientObservations.setCellValueFactory(new PropertyValueFactory<model.Client, String>("observations"));
 	}
 
-	@SuppressWarnings("unused")
 	private void initializeEmployeeTableView() {
 		ObservableList<model.Employee> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getEmployees());
@@ -217,7 +244,6 @@ public class RestaurantGUI {
 		tcEmployeeID.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("ID"));
 	}
 
-	@SuppressWarnings("unused")
 	private void initializeUsersTableView() {
 		ObservableList<model.User> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getUsers());
@@ -228,7 +254,6 @@ public class RestaurantGUI {
 		tcUserUsername.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("username"));
 	}
 
-	@SuppressWarnings("unused")
 	private void initializeOrdersTableView() {
 		ObservableList<model.Order> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getOrders());
@@ -243,42 +268,17 @@ public class RestaurantGUI {
 		tcOrderObservations.setCellValueFactory(new PropertyValueFactory<model.Order, String>("observations"));
 	}
 
-	public void loadLogin() throws Exception {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-		fxmlLoader.setController(this);
-		Parent loginPane = fxmlLoader.load();
-		mainPane.add(loginPane, 0, 0);
-	}
-
-	public void logIn() throws IOException {
+	public void logIn() {
 		String username = txtLoginName.getText();
 		String password = txtLoginPassword.getText();
 		User user = restaurant.searchUser(username);
 		if(user != null && user.getPassword().equals(password)) {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("table-view.fxml"));
-			fxmlLoader.setController(this);
-			Parent loginPane;
-			try {
-				loginPane = fxmlLoader.load();
-				mainPane.getChildren().clear();
-				mainPane.add(loginPane, 0, 0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			loadScreen("table-view.fxml");
 		}
 	}
 
 	public void signUp() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
-		fxmlLoader.setController(this);
-		Parent loginPane;
-		try {
-			loginPane = fxmlLoader.load();
-			mainPane.getChildren().clear();
-			mainPane.add(loginPane, 0, 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		loadScreen("register.fxml");
 	}
 
 	public void createAccount() {
@@ -302,53 +302,41 @@ public class RestaurantGUI {
 	}
 
 	public void signIn() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-		fxmlLoader.setController(this);
-		Parent loginPane;
-		try {
-			loginPane = fxmlLoader.load();
-			mainPane.getChildren().clear();
-			mainPane.add(loginPane, 0, 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		loadScreen("login.fxml");
 	}
 
 	public void logOut() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-		fxmlLoader.setController(this);
-		Parent loginPane;
-		try {
-			loginPane = fxmlLoader.load();
-			mainPane.getChildren().clear();
-			mainPane.add(loginPane, 0, 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		loadScreen("login.fxml");
 	}
 
 	public void viewProducts() {
-
+		loadTable("products-table-view.fxml");
+		initializeProductsTableView();
 	}
 
 	public void viewIngredients() {
-
+		loadTable("ingredient-table-view.fxml");
+		initializeIngredientsTableView();
 	}
 
 	public void viewClients() {
-
+		loadTable("client-table-view.fxml");
+		initializeClientsTableView();
 	}
 
 	public void viewEmployees() {
-
+		loadTable("employee-table-view.fxml");
+		initializeEmployeeTableView();
 	}
 
 	public void viewUsers() {
-
+		loadTable("user-table-view.fxml");
+		initializeUsersTableView();
 	}
 
 	public void viewOrders() {
-
+		loadTable("order-table-view.fxml");
+		initializeOrdersTableView();
 	}
 
 	public void addProducts() {
