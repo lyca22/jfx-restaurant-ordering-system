@@ -37,6 +37,7 @@ public class Restaurant {
 	private ArrayList<Employee> employees;
 	private ArrayList<User> users;
 	private ArrayList<Order> orders;
+	private User actualUser;
 
 	public Restaurant(String name, String address) {
 		this.name = name;
@@ -630,6 +631,24 @@ public class Restaurant {
 			loaded = true;
 		}
 		return loaded;
+	}
+
+	public boolean logIn(String username, String password) {
+		boolean canLogIn = false;
+		User user = searchUser(username);
+		if(user != null && user.getPassword().equals(password)) {
+			canLogIn = true;
+			actualUser = user;
+		}
+		return canLogIn;
+	}
+	
+	public User getActualUser() {
+		return actualUser;
+	}
+
+	public void setActualUser(User actualUser) {
+		this.actualUser = actualUser;
 	}
 
 }

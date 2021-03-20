@@ -7,14 +7,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import model.Restaurant;
-import model.User;
 
 public class RestaurantGUI {
 
@@ -51,7 +53,7 @@ public class RestaurantGUI {
 	private PasswordField txtRegisterPassword;
 
 	//Table pane.
-	
+
 	@FXML
 	private GridPane tablePane;
 
@@ -166,6 +168,12 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Order, String> tcOrderObservations;
 
+	@FXML
+	Dialog<String> dialog;
+
+	@FXML
+	private TextField txtIngredientName;
+
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -271,8 +279,7 @@ public class RestaurantGUI {
 	public void logIn() {
 		String username = txtLoginName.getText();
 		String password = txtLoginPassword.getText();
-		User user = restaurant.searchUser(username);
-		if(user != null && user.getPassword().equals(password)) {
+		if(restaurant.logIn(username, password)) {
 			loadScreen("table-view.fxml");
 		}
 	}
@@ -340,11 +347,31 @@ public class RestaurantGUI {
 	}
 
 	public void addProducts() {
-
+		
 	}
 
 	public void addIngredients() {
-
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("add-ingredient.fxml"));
+		fxmlLoader.setController(this);
+		dialog = new Dialog<String>();
+		ButtonType acceptButtonType = new ButtonType("Aceptar", ButtonData.APPLY);
+		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, ButtonType.CANCEL);
+		Parent root;
+		try {
+			root = fxmlLoader.load();
+			dialog.getDialogPane().setContent(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String ingredientName = txtIngredientName.getText();
+				restaurant.addIngredient(ingredientName, restaurant.getActualUser());
+				System.out.println(restaurant.getIngredients().toString());
+			}
+			return null;
+		});
+		dialog.showAndWait();
 	}
 
 	public void addClients() {

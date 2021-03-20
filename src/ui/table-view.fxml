@@ -27,7 +27,7 @@
           <Menu mnemonicParsing="false" text="Agregar">
             <items>
                   <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Ingredientes" />
+                  <MenuItem mnemonicParsing="false" onAction="#addIngredients" text="Ingredientes" />
                   <MenuItem mnemonicParsing="false" text="Clientes" />
                   <MenuItem mnemonicParsing="false" text="Empleados" />
                   <MenuItem mnemonicParsing="false" text="Usuarios" />
