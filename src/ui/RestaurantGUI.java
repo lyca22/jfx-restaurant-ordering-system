@@ -19,6 +19,7 @@ public class RestaurantGUI {
 
 	private Restaurant restaurant;
 
+	//Main pane
 	@FXML
 	private GridPane mainPane;
 
@@ -28,6 +29,8 @@ public class RestaurantGUI {
 	@FXML
 	private PasswordField txtLoginPassword;
 
+
+	//Register
 	@FXML
 	private TextField txtRegisterName;
 
@@ -43,15 +46,60 @@ public class RestaurantGUI {
 	@FXML
 	private PasswordField txtRegisterPassword;
 
+
+	//List of Products
 	@FXML
 	private TableView<model.Product> tvProducts;
 
 	@FXML
+	private TableColumn<model.Product, String> tcProductName;
+
+	@FXML
+	private TableColumn<model.Product, String> tcProductType;
+
+	@FXML
+	private TableColumn<model.Product, String> tcProductIngredients;
+
+	@FXML
+	private TableColumn<model.Product, String> tcProductSize;
+
+	@FXML
+	private TableColumn<model.Product, String> tcProductPrice;
+
+
+	//List of Ingredients
+	@FXML
 	private TableView<model.Ingredient> tvIngredients;
 
 	@FXML
+	private TableColumn<model.Ingredient, String> tcIngredientName;
+
+
+	//List of Clients
+	@FXML
 	private TableView<model.Client> tvClients;
 
+	@FXML
+	private TableColumn<model.Client, String> tcClientName;
+
+	@FXML
+	private TableColumn<model.Client, String> tcClientSurnames;
+
+	@FXML
+	private TableColumn<model.Client, String> tcClientID;
+
+	@FXML
+	private TableColumn<model.Client, String> tcClientAddress;
+
+	@FXML
+	private TableColumn<model.Client, String> tcClientPhone;
+
+	@FXML
+	private TableColumn<model.Client, String> tcClientObservations;
+
+
+
+	//List of Employees
 	@FXML
 	private TableView<model.Employee> tvEmployees;
 
@@ -63,6 +111,9 @@ public class RestaurantGUI {
 
 	@FXML
 	private TableColumn<model.Employee, String> tcEmployeeID;
+
+
+	//List of Users
 
 	@FXML
 	private TableView<model.User> tvUsers;
@@ -79,6 +130,8 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Employee, String> tcUserUsername;
 
+
+	//List of Orders
 	@FXML
 	private TableView<model.Order> tvOrders;
 
@@ -106,6 +159,8 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Order, String> tcOrderObservations;
 
+
+
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -117,6 +172,43 @@ public class RestaurantGUI {
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
+
+	
+	@SuppressWarnings("unused")
+	private void initializeProductsTableView() {
+		ObservableList<model.Product> observableList;
+		observableList = FXCollections.observableArrayList(restaurant.getProducts());
+		tvProducts.setItems(observableList);
+		tcProductName.setCellValueFactory(new PropertyValueFactory<model.Product, String>("name"));
+		tcProductType.setCellValueFactory(new PropertyValueFactory<model.Product, String>("productType"));
+		tcProductIngredients.setCellValueFactory(new PropertyValueFactory<model.Product, String>("ingredients"));
+		tcProductSize.setCellValueFactory(new PropertyValueFactory<model.Product, String>("productSize"));
+		tcProductPrice.setCellValueFactory(new PropertyValueFactory<model.Product, String>("price"));
+		
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private void initializeIngredientsTableView() {
+		ObservableList<model.Ingredient> observableList;
+		observableList = FXCollections.observableArrayList(restaurant.getIngredients());
+		tvIngredients.setItems(observableList);
+		tcIngredientName.setCellValueFactory(new PropertyValueFactory<model.Ingredient, String>("name"));
+	}
+
+	@SuppressWarnings("unused")
+	private void initializeClientsTableView() {
+		ObservableList<model.Client> observableList;
+		observableList = FXCollections.observableArrayList(restaurant.getClients());
+		tvClients.setItems(observableList);
+		tcClientName.setCellValueFactory(new PropertyValueFactory<model.Client, String>("name"));
+		tcClientSurnames.setCellValueFactory(new PropertyValueFactory<model.Client, String>("surname"));
+		tcClientID.setCellValueFactory(new PropertyValueFactory<model.Client, String>("ID"));
+		tcClientAddress.setCellValueFactory(new PropertyValueFactory<model.Client, String>("address"));
+		tcClientPhone.setCellValueFactory(new PropertyValueFactory<model.Client, String>("phoneNumber"));
+		tcClientObservations.setCellValueFactory(new PropertyValueFactory<model.Client, String>("observations"));
+	}
+	
 
 	@SuppressWarnings("unused")
 	private void initializeEmployeeTableView() {

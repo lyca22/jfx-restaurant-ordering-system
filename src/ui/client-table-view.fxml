@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<TableView fx:id="tvClients" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0" prefWidth="1227.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+  <columns>
+    <TableColumn fx:id="tcClientName" prefWidth="194.0" text="Nombre" />
+    <TableColumn fx:id="tcClientSurnames" minWidth="0.0" prefWidth="286.0000305175781" text="Apellidos" />
+      <TableColumn fx:id="tcClientID" prefWidth="185.0" text="ID" />
+      <TableColumn fx:id="tcClientAddress" prefWidth="169.0" text="Dirección" />
+      <TableColumn fx:id="tcClientPhone" prefWidth="147.0" text="Teléfono" />
+      <TableColumn fx:id="tcClientObservations" prefWidth="245.0" text="Observaciones" />
+  </columns>
+</TableView>
