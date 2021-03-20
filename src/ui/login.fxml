@@ -36,7 +36,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField fx:id="txtLoginName">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -56,7 +56,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <PasswordField />
+            <PasswordField fx:id="txtLoginPassword" />
          </children>
          <VBox.margin>
             <Insets right="1.0" />
@@ -72,7 +72,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" style="-fx-background-color: #F4D03F;" text="Ingresar" textFill="#50320a">
+            <Button mnemonicParsing="false" onAction="#logIn" prefHeight="31.0" prefWidth="119.0" style="-fx-background-color: #F4D03F;" text="Ingresar" textFill="#50320a">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>

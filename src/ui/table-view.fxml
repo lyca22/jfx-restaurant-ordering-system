@@ -16,36 +16,36 @@
         <menus>
           <Menu mnemonicParsing="false" text="Ver">
             <items>
-              <MenuItem mnemonicParsing="false" text="Products" />
-                  <MenuItem mnemonicParsing="false" text="Ingredients" />
-                  <MenuItem mnemonicParsing="false" text="Clients" />
-                  <MenuItem mnemonicParsing="false" text="Employees" />
-                  <MenuItem mnemonicParsing="false" text="Users" />
-                  <MenuItem mnemonicParsing="false" text="Orders" />
+              <MenuItem mnemonicParsing="false" text="Productos" />
+                  <MenuItem mnemonicParsing="false" text="Ingredientes" />
+                  <MenuItem mnemonicParsing="false" text="Clientes" />
+                  <MenuItem mnemonicParsing="false" text="Empleados" />
+                  <MenuItem mnemonicParsing="false" text="Usuarios" />
+                  <MenuItem mnemonicParsing="false" text="Órdenes" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Agregar">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Products" />
-                  <MenuItem mnemonicParsing="false" text="Ingredients" />
-                  <MenuItem mnemonicParsing="false" text="Clients" />
-                  <MenuItem mnemonicParsing="false" text="Employees" />
-                  <MenuItem mnemonicParsing="false" text="Users" />
-                  <MenuItem mnemonicParsing="false" text="Orders" />
+                  <MenuItem mnemonicParsing="false" text="Productos" />
+                  <MenuItem mnemonicParsing="false" text="Ingredientes" />
+                  <MenuItem mnemonicParsing="false" text="Clientes" />
+                  <MenuItem mnemonicParsing="false" text="Empleados" />
+                  <MenuItem mnemonicParsing="false" text="Usuarios" />
+                  <MenuItem mnemonicParsing="false" text="Órdenes" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Importar">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Products' information" />
-                  <MenuItem mnemonicParsing="false" text="Clients' information" />
-                  <MenuItem mnemonicParsing="false" text="Orders' information" />
+                  <MenuItem mnemonicParsing="false" text="Información de productos" />
+                  <MenuItem mnemonicParsing="false" text="Información de clientes" />
+                  <MenuItem mnemonicParsing="false" text="Información de órdenes" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Exportar">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Products' information" />
-                  <MenuItem mnemonicParsing="false" text="Employees' information" />
-                  <MenuItem mnemonicParsing="false" text="Orders' information" />
+                  <MenuItem mnemonicParsing="false" text="Información de productos" />
+                  <MenuItem mnemonicParsing="false" text="Información de empleados" />
+                  <MenuItem mnemonicParsing="false" text="Información de órdenes" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Cerrar sesión" />

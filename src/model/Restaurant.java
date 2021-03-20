@@ -151,6 +151,33 @@ public class Restaurant {
 		}
 	}
 
+	public User searchUser(String username) {
+		User foundUser = null;
+		int index = binarySearchForUser(username);
+		if(index >= 0) {
+			foundUser = users.get(index);
+		}
+		return foundUser;
+	}
+
+	public int binarySearchForUser(String username) {
+		int pos = -1;
+		int i = 0;
+		int j = users.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			if(users.get(middle).getUsername().compareTo(username) == 0) {
+				pos = middle;
+			}else if(users.get(middle).getUsername().compareTo(username) > 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
+	}
+
 	//Add methods.
 
 	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
@@ -184,9 +211,12 @@ public class Restaurant {
 	}
 
 	public void addUser(String name, String surname, int iD, String username, String password) {
-		User user = new User(name, surname, iD, username, password);
-		users.add(user);
-		Collections.sort(users);
+		User user = searchUser(username);
+		if(users.size() == 0 || user == null) {
+			User newUser = new User(name, surname, iD, username, password);
+			users.add(newUser);
+			Collections.sort(users);
+		}
 	}
 
 	public void addOrder(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, Date date, String observations, User user) {

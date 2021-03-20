@@ -14,14 +14,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import model.Restaurant;
+import model.User;
 
 public class RestaurantGUI {
 
 	private Restaurant restaurant;
 
-	//Main pane
+	//Main pane.
+
 	@FXML
 	private GridPane mainPane;
+
+	//Login fields.
 
 	@FXML
 	private TextField txtLoginName;
@@ -29,8 +33,8 @@ public class RestaurantGUI {
 	@FXML
 	private PasswordField txtLoginPassword;
 
+	//Register fields.
 
-	//Register
 	@FXML
 	private TextField txtRegisterName;
 
@@ -46,8 +50,8 @@ public class RestaurantGUI {
 	@FXML
 	private PasswordField txtRegisterPassword;
 
+	//Product list.
 
-	//List of Products
 	@FXML
 	private TableView<model.Product> tvProducts;
 
@@ -66,16 +70,16 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Product, String> tcProductPrice;
 
+	//Ingredient list.
 
-	//List of Ingredients
 	@FXML
 	private TableView<model.Ingredient> tvIngredients;
 
 	@FXML
 	private TableColumn<model.Ingredient, String> tcIngredientName;
 
+	//Client list.
 
-	//List of Clients
 	@FXML
 	private TableView<model.Client> tvClients;
 
@@ -97,9 +101,8 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Client, String> tcClientObservations;
 
+	//Employee list.
 
-
-	//List of Employees
 	@FXML
 	private TableView<model.Employee> tvEmployees;
 
@@ -112,8 +115,7 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Employee, String> tcEmployeeID;
 
-
-	//List of Users
+	//User list.
 
 	@FXML
 	private TableView<model.User> tvUsers;
@@ -130,8 +132,8 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Employee, String> tcUserUsername;
 
+	//Order list.
 
-	//List of Orders
 	@FXML
 	private TableView<model.Order> tvOrders;
 
@@ -159,8 +161,6 @@ public class RestaurantGUI {
 	@FXML
 	private TableColumn<model.Order, String> tcOrderObservations;
 
-
-
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -173,7 +173,6 @@ public class RestaurantGUI {
 		this.restaurant = restaurant;
 	}
 
-	
 	@SuppressWarnings("unused")
 	private void initializeProductsTableView() {
 		ObservableList<model.Product> observableList;
@@ -184,10 +183,9 @@ public class RestaurantGUI {
 		tcProductIngredients.setCellValueFactory(new PropertyValueFactory<model.Product, String>("ingredients"));
 		tcProductSize.setCellValueFactory(new PropertyValueFactory<model.Product, String>("productSize"));
 		tcProductPrice.setCellValueFactory(new PropertyValueFactory<model.Product, String>("price"));
-		
+
 	}
-	
-	
+
 	@SuppressWarnings("unused")
 	private void initializeIngredientsTableView() {
 		ObservableList<model.Ingredient> observableList;
@@ -208,7 +206,6 @@ public class RestaurantGUI {
 		tcClientPhone.setCellValueFactory(new PropertyValueFactory<model.Client, String>("phoneNumber"));
 		tcClientObservations.setCellValueFactory(new PropertyValueFactory<model.Client, String>("observations"));
 	}
-	
 
 	@SuppressWarnings("unused")
 	private void initializeEmployeeTableView() {
@@ -254,7 +251,21 @@ public class RestaurantGUI {
 	}
 
 	public void logIn() throws IOException {
-
+		String username = txtLoginName.getText();
+		String password = txtLoginPassword.getText();
+		User user = restaurant.searchUser(username);
+		if(user != null && user.getPassword().equals(password)) {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("table-view.fxml"));
+			fxmlLoader.setController(this);
+			Parent loginPane;
+			try {
+				loginPane = fxmlLoader.load();
+				mainPane.getChildren().clear();
+				mainPane.add(loginPane, 0, 0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void signUp() {
@@ -271,7 +282,23 @@ public class RestaurantGUI {
 	}
 
 	public void createAccount() {
-
+		try {
+			boolean wroteName = !txtRegisterName.getText().isEmpty();
+			boolean wroteSurname = !txtRegisterSurname.getText().isEmpty();
+			boolean wroteID = !txtRegisterID.getText().isEmpty();
+			boolean wroteUsername = !txtRegisterUsername.getText().isEmpty();
+			boolean wrotePassword = !txtRegisterPassword.getText().isEmpty();
+			String name = txtRegisterName.getText();
+			String surname = txtRegisterSurname.getText();
+			int ID = Integer.parseInt(txtRegisterID.getText());
+			String username = txtRegisterUsername.getText();
+			String password = txtRegisterPassword.getText();
+			if(wroteName && wroteSurname && wroteID && wroteUsername && wrotePassword) {
+				restaurant.addUser(name, surname, ID, username, password);
+			}
+		} catch(NumberFormatException nfe) {
+			System.out.println("nfe");
+		}
 	}
 
 	public void signIn() {

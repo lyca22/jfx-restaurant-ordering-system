@@ -29,7 +29,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField fx:id="txtRegisterName">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -52,7 +52,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField fx:id="txtRegisterSurname">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -72,7 +72,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField fx:id="txtRegisterID">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -92,7 +92,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField fx:id="txtRegisterUsername">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -112,7 +112,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <PasswordField>
+            <PasswordField fx:id="txtRegisterPassword">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -135,7 +135,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="120.0" style="-fx-background-color: #F4D03F;" text="Crear Cuenta" textFill="#50320a">
+            <Button mnemonicParsing="false" onAction="#createAccount" prefHeight="28.0" prefWidth="120.0" style="-fx-background-color: #F4D03F;" text="Crear Cuenta" textFill="#50320a">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
