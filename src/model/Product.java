@@ -94,7 +94,5 @@ public class Product {
 				+ ", productSize=" + productSize + ", price=" + price + ", userWhoCreated=" + userWhoCreated
 				+ ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
-
-	
 	
 }

@@ -27,7 +27,7 @@ public class Restaurant {
 	public static final String EMPLOYEES_FILE_NAME = "data/employees.restr";
 	public static final String USERS_FILE_NAME = "data/users.restr";
 	public static final String ORDERS_FILE_NAME = "data/orders.restr";
-	
+
 	private String name;
 	private String address;
 	private ArrayList<Product> products;
@@ -37,7 +37,7 @@ public class Restaurant {
 	private ArrayList<Employee> employees;
 	private ArrayList<User> users;
 	private ArrayList<Order> orders;
-	
+
 	public Restaurant(String name, String address) {
 		this.name = name;
 		this.address = address;
@@ -117,42 +117,42 @@ public class Restaurant {
 		this.orders = orders;
 	}
 
-	//Sort Methods
-	
-		public void sortClientBySurnameAndName() {
-			Comparator<Client> clientComparator = new ClientSurnameAndNameComparator();
-			Collections.sort(clients, clientComparator);
-		}
-		
-		public void sortProductByInsertion(ArrayList<Product> array) {
-			for(int i=1;i<array.size(); i++) {
-				for(int j=i; j>0 && array.get(j-1).getPrice()>array.get(j).getPrice();j--) {
-					Product temp = array.get(j);
-					array.set(j,array.get(j-1));
-					array.set(j-1,temp);
-				}
-		
+	//Sorting methods.
+
+	public void sortClientBySurnameAndName() {
+		Comparator<Client> clientComparator = new ClientSurnameAndNameComparator();
+		Collections.sort(clients, clientComparator);
+	}
+
+	public void sortProductByInsertion(ArrayList<Product> array) {
+		for(int i=1;i<array.size(); i++) {
+			for(int j=i; j>0 && array.get(j-1).getPrice()>array.get(j).getPrice();j--) {
+				Product temp = array.get(j);
+				array.set(j,array.get(j-1));
+				array.set(j-1,temp);
 			}
+
 		}
-		
-		public void sortIngredientBySelection(ArrayList<Ingredient> array) {
-			for (int i = 0; i < array.size(); i++) {
-				String min = array.get(i).getName();
-				
-				for(int j=i+1; j<array.size();j++) {
-					if(array.get(j).getName().compareTo(min)>0) {
-						String temp = array.get(j).getName();
-						array.get(j).setName(min);
-						min = temp;
-					}
+	}
+
+	public void sortIngredientBySelection(ArrayList<Ingredient> array) {
+		for (int i = 0; i < array.size(); i++) {
+			String min = array.get(i).getName();
+
+			for(int j=i+1; j<array.size();j++) {
+				if(array.get(j).getName().compareTo(min)>0) {
+					String temp = array.get(j).getName();
+					array.get(j).setName(min);
+					min = temp;
 				}
-				array.get(i).setName(min);
-				
 			}
+			array.get(i).setName(min);
+
 		}
-	
-	//Add methods
-	
+	}
+
+	//Add methods.
+
 	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
 		Product product = new Product(name, productType, ingredients, productSize, price, user);
 		products.add(product);
@@ -176,7 +176,6 @@ public class Restaurant {
 		clients.add(client);
 		sortClientBySurnameAndName();
 	}
-	
 
 	public void addEmployee(String name, String surname, int ID) {
 		Employee employee = new Employee(name, surname, ID);
@@ -195,11 +194,9 @@ public class Restaurant {
 		orders.add(order);
 		Collections.sort(orders);
 	}
-	
-	
 
-	//Delete methods
-	
+	//Delete methods.
+
 	public void deleteProduct(Product product) {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
@@ -299,10 +296,8 @@ public class Restaurant {
 		orders.remove(order);
 	}
 
-	
-	
-	//Update methods
-	
+	//Update methods.
+
 	public void updateProduct(Product product, String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User lastUserWhoModified) {
 		product.setName(name);
 		product.setProductType(productType);
@@ -353,10 +348,8 @@ public class Restaurant {
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
 	}
-	
-	
-	
-	//Disable methods
+
+	//Disable methods.
 
 	public void disableProduct(Product product, boolean option) {
 		product.setDisabled(option);
@@ -381,123 +374,117 @@ public class Restaurant {
 	public void disableUser(User user, boolean option) {
 		user.setDisabled(option);
 	}
-	
-	
 
-	//Generate reports methods
-	
+	//Report generating methods.
+
 	public void generateOrderReport(String fileName, String separator) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
-		
+
 		//Pending
-		
+
 		pw.close();
 	}
 
 	public void generateEmployeeReport(String fileName, String separator) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
-		
+
 		//Pending
-		
+
 		pw.close();
 	}
 
 	public void generateProductReport(String fileName, String separator) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
-		
+
 		//Pending
-		
+
 		pw.close();
 	}
-	
 
-	//Import methods
-	
+	//Import methods.
+
 	public void importClientData(String fileName) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		//Pending
-		
+
 		br.close();
 	}
 
 	public void importProductData(String fileName) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		//Pending
-		
+
 		br.close();
 	}
 
 	public void importOrderData(String fileName) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		//Pending
-		
+
 		br.close();
 	}
-	
-	
-	
+
 	//Save methods
 
 	public void saveName() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(NAME_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveAddress() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ADDRESS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveProducts() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PRODUCTS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveProductTypes() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PRODUCT_TYPES_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveIngredients() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(INGREDIENTS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveClients() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CLIENTS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveEmployees() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(EMPLOYEES_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveUsers() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
 
 	public void saveOrders() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ORDERS_FILE_NAME));
 		oos.writeObject(name);
-	    oos.close();
+		oos.close();
 	}
-	
 
-	//Load methods
-	
+	//Load methods.
+
 	public boolean loadName() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(NAME_FILE_NAME);
 		boolean loaded = false;
@@ -612,6 +599,5 @@ public class Restaurant {
 		}
 		return loaded;
 	}
-
 
 }

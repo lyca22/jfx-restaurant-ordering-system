@@ -95,16 +95,12 @@ public class Client {
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 	}
-
 	
-
 	@Override
 	public String toString() {
 		return "Client [name=" + name + ", surname=" + surname + ", ID=" + ID + ", address=" + address
 				+ ", phoneNumber=" + phoneNumber + ", observations=" + observations + ", userWhoCreated="
 				+ userWhoCreated + ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
-	
-	
 	
 }

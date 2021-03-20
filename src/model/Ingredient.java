@@ -57,6 +57,4 @@ public class Ingredient implements Comparable<Ingredient>{
 				+ lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
 	
-	
-	
 }

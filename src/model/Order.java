@@ -114,4 +114,18 @@ public class Order implements Comparable<Order>{
 		return orderCode - o.getOrderCode();
 	}
 	
+	public String getProductsInString() {
+		String text = products.toString()
+		.replace("[", "")
+		.replace("]", "");
+		return text;
+	}
+	
+	public String getQuantityInString() {
+		String text = quantity.toString()
+				.replace("[", "")
+				.replace("]", "");
+		return text;
+	}
+	
 }
