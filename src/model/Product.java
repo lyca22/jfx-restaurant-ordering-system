@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Product {
@@ -12,7 +13,7 @@ public class Product {
 	private User userWhoCreated;
 	private User lastUserWhoModified;
 	private boolean disabled;
-	
+
 	public Product(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
 		this.name = name;
 		this.productType = productType;
@@ -94,5 +95,36 @@ public class Product {
 				+ ", productSize=" + productSize + ", price=" + price + ", userWhoCreated=" + userWhoCreated
 				+ ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
-	
+
+	public String getProductTypeAsString() {
+		String text = getProductType().getName();
+		return text;
+	}
+
+	public String getIngredientsAsString() {
+		String text;
+		String[] ingredients = new String[getIngredients().size()];
+		for(int i = 0; i < getIngredients().size(); i++) {
+			ingredients[i] = getIngredients().get(i).getName();
+		}
+		text = Arrays.toString(ingredients)
+				.replace("[", "")
+				.replace("]", "");
+		return text;
+	}
+
+	public String getSizeAsString() {
+		ProductSize size = getProductSize();
+		String text = "";
+		switch(size) {
+		case Meal_Box_For_One:
+			text = "Caja personal";
+			break;
+		case Meal_Box_For_Two:
+			text = "Caja para dos";
+			break;
+		}
+		return text;
+	}
+
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -42,26 +41,22 @@
             <Label text="ID:" GridPane.rowIndex="2" />
             <Label text="Dirección:" GridPane.rowIndex="3" />
             <Label text="Teléfono:" GridPane.rowIndex="4" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txtClientName" GridPane.columnIndex="1" />
+            <TextField fx:id="txtClientID" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtClientAddress" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtClientPhone" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Creado por:" GridPane.rowIndex="6" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="7" />
             <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Apellido:" GridPane.rowIndex="1" />
             <Label text="Observaciones:" GridPane.rowIndex="5" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtClientObservations" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="txtClientSurname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
          <padding>
             <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
          </padding>
       </GridPane>
    </content>
-   <buttonTypes>
-      <ButtonType fx:constant="CANCEL" />
-      <ButtonType fx:constant="APPLY" />
-   </buttonTypes>
 </DialogPane>

@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class Restaurant {
@@ -152,6 +151,51 @@ public class Restaurant {
 		}
 	}
 
+	public Product searchProduct(String name) {
+		Product foundProduct = null;
+		int index = binarySearchForProduct(name);
+		if(index >= 0) {
+			foundProduct = products.get(index);
+		}
+		return foundProduct;
+	}
+	
+	public ProductType searchProductType(String name) {
+		ProductType foundProductType = null;
+		int index = binarySearchForProductType(name);
+		if(index >= 0) {
+			foundProductType = productTypes.get(index);
+		}
+		return foundProductType;
+	}
+
+	public Ingredient searchIngredient(String name) {
+		Ingredient foundIngredient = null;
+		int index = binarySearchForIngredient(name);
+		if(index >= 0) {
+			foundIngredient = ingredients.get(index);
+		}
+		return foundIngredient;
+	}
+	
+	public Client searchClient(String name) {
+		Client foundClient = null;
+		int index = binarySearchForClient(name);
+		if(index >= 0) {
+			foundClient = clients.get(index);
+		}
+		return foundClient;
+	}
+	
+	public Employee searchEmployee(String name) {
+		Employee foundEmployee = null;
+		int index = binarySearchForEmployee(name);
+		if(index >= 0) {
+			foundEmployee = employees.get(index);
+		}
+		return foundEmployee;
+	}
+
 	public User searchUser(String username) {
 		User foundUser = null;
 		int index = binarySearchForUser(username);
@@ -159,6 +203,99 @@ public class Restaurant {
 			foundUser = users.get(index);
 		}
 		return foundUser;
+	}
+
+	public int binarySearchForProduct(String name) {
+		int pos = -1;
+		int i = 0;
+		int j = products.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			System.out.println(products.get(middle).getName());
+			System.out.println(name);
+			System.out.println(products.get(middle).getName().compareTo(name));
+			if(products.get(middle).getName().compareTo(name) == 0) {
+				pos = middle;
+			}else if(products.get(middle).getName().compareTo(name) < 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
+	}
+	
+	public int binarySearchForProductType(String name) {
+		int pos = -1;
+		int i = 0;
+		int j = productTypes.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			if(productTypes.get(middle).getName().compareTo(name) == 0) {
+				pos = middle;
+			}else if(productTypes.get(middle).getName().compareTo(name) > 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
+	}
+
+	public int binarySearchForIngredient(String name) {
+		int pos = -1;
+		int i = 0;
+		int j = ingredients.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			if(ingredients.get(middle).getName().compareTo(name) == 0) {
+				pos = middle;
+			}else if(ingredients.get(middle).getName().compareTo(name) < 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
+	}
+	
+	public int binarySearchForClient(String name) {
+		int pos = -1;
+		int i = 0;
+		int j = clients.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			if(clients.get(middle).getName().compareTo(name) == 0) {
+				pos = middle;
+			}else if(clients.get(middle).getName().compareTo(name) < 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
+	}
+	
+	public int binarySearchForEmployee(String name) {
+		int pos = -1;
+		int i = 0;
+		int j = employees.size()-1;
+
+		while(i <= j && pos < 0) {
+			int middle = (i+j)/2;
+			if(employees.get(middle).getName().compareTo(name) == 0) {
+				pos = middle;
+			}else if(employees.get(middle).getName().compareTo(name) < 0) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		return pos;
 	}
 
 	public int binarySearchForUser(String username) {
@@ -178,6 +315,8 @@ public class Restaurant {
 		}
 		return pos;
 	}
+
+
 
 	//Add methods.
 
@@ -222,8 +361,9 @@ public class Restaurant {
 		}
 	}
 
-	public void addOrder(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, Date date, String observations, User user) {
-		Order order = new Order(orderCode, products, quantity, client, employeeWhoDelivered, date, observations, user);
+	public void addOrder(List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User user) {
+		int orderCode = 0;
+		Order order = new Order(orderCode, products, quantity, client, employeeWhoDelivered, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
 	}
@@ -380,6 +520,25 @@ public class Restaurant {
 		order.setEmployeeWhoDelivered(employeeWhoDelivered);
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
+	}
+
+	public void updateOrderState(Order order) {
+		OrderState status = order.getOrderState();
+		switch(status) {
+		case Requested:
+			status = OrderState.In_Process;
+			break;
+		case In_Process:
+			status = OrderState.Sent;
+			break;
+		case Sent:
+			status = OrderState.Delivered;
+			break;
+		case Delivered:
+			status = OrderState.Delivered;
+			break;
+		}
+		order.setOrderState(status);
 	}
 
 	//Disable methods.
@@ -642,7 +801,7 @@ public class Restaurant {
 		}
 		return canLogIn;
 	}
-	
+
 	public User getActualUser() {
 		return actualUser;
 	}

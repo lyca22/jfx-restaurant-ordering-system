@@ -1,10 +1,11 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public class Order implements Comparable<Order>{
-	
+
 	private int orderCode;
 	private OrderState orderState;
 	private List<Product> products;
@@ -15,15 +16,15 @@ public class Order implements Comparable<Order>{
 	private String observations;
 	private User userWhoCreated;
 	private User lastUserWhoModified;
-	
-	public Order(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, Date date, String observations, User user) {
+
+	public Order(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User user) {
 		setOrderCode(orderCode);
 		setOrderState(OrderState.Requested);
 		setProducts(products);
 		setQuantity(quantity);
 		setClient(client);
 		setEmployeeWhoDelivered(employeeWhoDelivered);
-		setDate(date);
+		date = new Date();
 		setObservations(observations);
 		userWhoCreated = user;
 		lastUserWhoModified = user;
@@ -113,19 +114,52 @@ public class Order implements Comparable<Order>{
 	public int compareTo(Order o) {
 		return orderCode - o.getOrderCode();
 	}
-	
-	public String getProductsInString() {
-		String text = products.toString()
-		.replace("[", "")
-		.replace("]", "");
+
+	public String getOrderStateAsString() {
+		OrderState status = getOrderState();
+		String text = "";
+		switch(status) {
+		case Requested:
+			text = "SOLICITADO";
+			break;
+		case In_Process:
+			text = "EN PROCESO";
+			break;
+		case Sent:
+			text = "ENVIADO";
+			break;
+		case Delivered:
+			text = "ENTREGADO";
+			break;
+		}
 		return text;
 	}
-	
-	public String getQuantityInString() {
-		String text = quantity.toString()
+
+	public String getProductsAsString() {
+		String text;
+		String[] products = new String[getProducts().size()];
+		for(int i = 0; i < getProducts().size(); i++) {
+			products[i] = getProducts().get(i).getName();
+		}
+		text = Arrays.toString(products)
 				.replace("[", "")
 				.replace("]", "");
 		return text;
 	}
-	
+
+	public String getQuantityAsString() {
+		String text = Arrays.toString(getQuantity().toArray())
+				.replace("[", "")
+				.replace("]", "");
+		return text;
+	}
+
+	public String getClientAsString() {
+		String text = getClient().getName();
+		return text;
+	}
+	public String getEmployeeAsString() {
+		String text = getEmployeeWhoDelivered().getName();
+		return text;
+	}
 }

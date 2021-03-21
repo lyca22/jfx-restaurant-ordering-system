@@ -17,6 +17,7 @@
           <Menu mnemonicParsing="false" text="Ver">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#viewProducts" text="Productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewProductTypes" text="Tipo de productos" />
                   <MenuItem mnemonicParsing="false" onAction="#viewIngredients" text="Ingredientes" />
                   <MenuItem mnemonicParsing="false" onAction="#viewClients" text="Clientes" />
                   <MenuItem mnemonicParsing="false" onAction="#viewEmployees" text="Empleados" />
@@ -26,12 +27,12 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Agregar">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#addProducts" text="Productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#addProductType" text="Tipo de productos" />
                   <MenuItem mnemonicParsing="false" onAction="#addIngredients" text="Ingredientes" />
-                  <MenuItem mnemonicParsing="false" text="Clientes" />
-                  <MenuItem mnemonicParsing="false" text="Empleados" />
-                  <MenuItem mnemonicParsing="false" text="Usuarios" />
-                  <MenuItem mnemonicParsing="false" text="Órdenes" />
+                  <MenuItem mnemonicParsing="false" onAction="#addClients" text="Clientes" />
+                  <MenuItem mnemonicParsing="false" onAction="#addEmployees" text="Empleados" />
+                  <MenuItem mnemonicParsing="false" onAction="#addOrders" text="Órdenes" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Importar">
@@ -48,7 +49,10 @@
                   <MenuItem mnemonicParsing="false" text="Información de órdenes" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Cerrar sesión" />
+            <Menu mnemonicParsing="false" text="Cerrar sesión">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#logOut" text="Cerrar sesión" />
+               </items></Menu>
         </menus>
       </MenuBar>
       <GridPane fx:id="tablePane" VBox.vgrow="ALWAYS">
