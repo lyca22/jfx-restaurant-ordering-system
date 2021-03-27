@@ -89,12 +89,6 @@ public class Product {
 		this.disabled = disabled;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [name=" + name + ", productType=" + productType + ", ingredients=" + ingredients
-				+ ", productSize=" + productSize + ", price=" + price + ", userWhoCreated=" + userWhoCreated
-				+ ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
-	}
 
 	public String getProductTypeAsString() {
 		String text = getProductType().getName();

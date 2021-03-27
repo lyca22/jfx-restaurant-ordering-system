@@ -29,6 +29,7 @@ public class Order implements Comparable<Order>{
 		userWhoCreated = user;
 		lastUserWhoModified = user;
 	}
+	
 
 	public int getOrderCode() {
 		return orderCode;

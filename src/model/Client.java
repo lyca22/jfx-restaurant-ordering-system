@@ -102,5 +102,5 @@ public class Client {
 				+ ", phoneNumber=" + phoneNumber + ", observations=" + observations + ", userWhoCreated="
 				+ userWhoCreated + ", lastUserWhoModified=" + lastUserWhoModified + ", disabled=" + disabled + "]\n";
 	}
-	
+
 }

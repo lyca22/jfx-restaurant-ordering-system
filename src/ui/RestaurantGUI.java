@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import model.OrderState;
 import model.Product;
 import model.ProductSize;
 import model.ProductType;
+import javafx.stage.FileChooser;
 import model.Restaurant;
 
 public class RestaurantGUI {
@@ -672,15 +674,69 @@ public class RestaurantGUI {
 	}
 
 	public void importProducts() {
-
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Import Products Data");
+		File file = fileChooser.showOpenDialog(null);
+		String separator = ",";
+		try {
+			restaurant.importProductData(file.getAbsolutePath(), separator);
+			initializeProductsTableView();
+		} catch (IOException e) {
+			System.out.println("IOException found");
+		} catch (NullPointerException npe) {
+			System.out.println("NP Exception found");
+		} catch (NumberFormatException nfe) {
+			System.out.println("NF Exception found");
+		}
+		try {
+			restaurant.saveProducts();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void importClients() {
-
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Import Client Data");
+		File file = fileChooser.showOpenDialog(null);
+		String separator = ",";
+		try {
+			restaurant.importClientData(file.getAbsolutePath(), separator);
+			initializeClientsTableView();
+		} catch (IOException e) {
+			System.out.println("IOException found");
+		} catch (NullPointerException npe) {
+			System.out.println("NP Exception found");
+		} catch (NumberFormatException nfe) {
+			System.out.println("NF Exception found");
+		}
+		try {
+			restaurant.saveClients();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void importOrders() {
-
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Import Order Data");
+		File file = fileChooser.showOpenDialog(null);
+		String separator = ",";
+		try {
+			restaurant.importOrderData(file.getAbsolutePath(), separator);
+			initializeOrdersTableView();
+		} catch (IOException e) {
+			System.out.println("IOException found");
+		} catch (NullPointerException npe) {
+			System.out.println("NP Exception found");
+		} catch (NumberFormatException nfe) {
+			System.out.println("NF Exception found");
+		}
+		try {
+			restaurant.saveOrders();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void exportProducts() {

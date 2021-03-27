@@ -291,16 +291,18 @@ public class Restaurant {
 		sortIngredientBySelection(ingredients);
 	}
 
-	public void addClient(String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
+	public Client addClient(String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
 		Client client = new Client(name, surname, ID, address, phoneNumber, observations, user);
 		clients.add(client);
 		sortClientBySurnameAndName();
+		return client;
 	}
 
-	public void addEmployee(String name, String surname, int ID) {
+	public Employee addEmployee(String name, String surname, int ID) {
 		Employee employee = new Employee(name, surname, ID);
 		employees.add(employee);
 		sortEmployeeBySurnameAndName();
+		return employee;
 	}
 
 	public void addUser(String name, String surname, int iD, String username, String password) {
@@ -316,6 +318,12 @@ public class Restaurant {
 
 	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		int orderCode = 0;
+		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
+		orders.add(order);
+		Collections.sort(orders);
+	}
+	
+	public void addOrder(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
@@ -548,29 +556,123 @@ public class Restaurant {
 
 	//Import methods.
 
-	public void importClientData(String fileName) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
+	public void importClientData(String fileName, String separator) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader("data/CLIENTS_DATA.csv"));
 
-		//Pending
+		String line = br.readLine();
+		while(line != null) {
+			String[] ClientsData = line.split(separator);
+			String name = ClientsData[0];
+			String surname = ClientsData[1];
+			int ID = Integer.parseInt(ClientsData[2]);
+			String address = ClientsData[3];
+			int phoneNumber = Integer.parseInt(ClientsData[4]);
+			String observations = ClientsData[5];
+			addClient(name, surname, ID, address, phoneNumber, observations, actualUser);
+			line = br.readLine();
+
+		}
+
+		br.close();
+	}
+
+	public void importProductData(String fileName, String separator) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader("data/PRODUCTS_DATA.csv"));
+
+		String line = br.readLine();
+		while(line != null) {
+			String[] productsData = line.split(separator);
+			
+			String name = productsData[0];
+			
+			ProductType productType = new ProductType(productsData[1], null);
+			String[] ingredientList = productsData[2].split(",");
+			for (int i = 0; i < ingredientList.length; i++) {
+				addIngredient(ingredientList[i], actualUser);
+			}
+			
+			String productSizeTxt = productsData[3]; 
+			ProductSize productSize = ProductSize.Meal_Box_For_One;
+			switch(productSizeTxt) {
+			case "Caja personal": 
+				productSize = ProductSize.Meal_Box_For_One;
+				break;
+			case "Caja para dos":
+				productSize = ProductSize.Meal_Box_For_Two;
+				break;
+			}
+			
+			int price = Integer.parseInt(productsData[4]);
+	
+			addProduct(name, productType, ingredients, productSize, price, actualUser);
+			line = br.readLine();
+
+		}
 
 		br.close();
 	}
 
-	public void importProductData(String fileName) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
+	public void importOrderData(String fileName, String separator) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader("data/ORDER_DATA.csv"));
 
-		//Pending
+		String line = br.readLine();
+		while(line != null) {
+			String[] ordersData = line.split(separator);
+			
+			int orderCode = Integer.parseInt(ordersData[0]);
+			
+			String orderStateTxt = ordersData[1];
+			OrderState orderState = OrderState.Requested;
+			switch(orderStateTxt) {
+			case "Solicitado":
+				orderState = OrderState.Requested;
+				break;
+			case "En proceso":
+				orderState = OrderState.In_Process;
+				break;
+			case "Enviado":
+				orderState = OrderState.Sent;
+				break;
+			case "Entregado":
+				orderState = OrderState.Delivered;
+				break;
+			}
+						
+			List<Product> products = new ArrayList<Product>();
+			String[] productsList = ordersData[2].split(",");
+			
+			List<Integer> quantity = new ArrayList<Integer>();
+			String[] quantityList = ordersData[3].split(",");
+			
+			for (int i = 0; i < productsList.length; i++) {
+				Product productFound = searchProduct(productsList[i]);
+				if (productFound != null) {
+					products.add(productFound);
+					quantity.add(Integer.parseInt(quantityList[i]));
+				}
+			}
+			
+			String[] clientNameAndSurname = ordersData[4].split(" ");
+			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], 0, "", 0, "", actualUser);
+			
+			String[] employeeNameAndSurname = ordersData[5].split(" ");
+			Employee employee = addEmployee(employeeNameAndSurname[0], employeeNameAndSurname[1], 0);
+			
+			String[] dateInfo = ordersData[6].split("-");
+			String[] dayAndTimeInfo = dateInfo[2].split(" ");
+			String[] timeInfo = dayAndTimeInfo[1].split(":");
+			LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateInfo[0]), Integer.parseInt(dateInfo[1]), Integer.parseInt(dayAndTimeInfo[0]), Integer.parseInt(timeInfo[0]), Integer.parseInt(timeInfo[1]), Integer.parseInt(timeInfo[2]));
+			
+			String observations = ordersData[7];
+			
+			addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, actualUser);
+			line = br.readLine();
+		}
 
 		br.close();
 	}
-
-	public void importOrderData(String fileName) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-		//Pending
-
-		br.close();
-	}
+	
+	
 
 	//Save methods
 

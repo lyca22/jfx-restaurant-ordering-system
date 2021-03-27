@@ -49,5 +49,5 @@ public class ProductType implements Comparable<ProductType>{
 	public int compareTo(ProductType o) {
 		return name.compareTo(o.getName());
 	}
-	
+
 }

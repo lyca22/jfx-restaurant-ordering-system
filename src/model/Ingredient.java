@@ -13,7 +13,7 @@ public class Ingredient implements Comparable<Ingredient>{
 		lastUserWhoModified = user;
 		disabled = false;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
