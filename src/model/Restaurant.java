@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -117,22 +118,39 @@ public class Restaurant {
 		this.orders = orders;
 	}
 
+	public User getActualUser() {
+		return actualUser;
+	}
+
+	public void setActualUser(User actualUser) {
+		this.actualUser = actualUser;
+	}
+
 	//Sorting methods.
+
+	public void sortProductByInsertion(ArrayList<Product> array) {
+		for(int i = 1;i < array.size(); i++) {
+			for(int j = i; j > 0 && array.get(j-1).getPrice()>array.get(j).getPrice();j--) {
+				Product temp = array.get(j);
+				array.set(j,array.get(j-1));
+				array.set(j-1,temp);
+			}
+		}
+	}
 
 	public void sortClientBySurnameAndName() {
 		Comparator<Client> clientComparator = new ClientSurnameAndNameComparator();
 		Collections.sort(clients, clientComparator);
 	}
 
-	public void sortProductByInsertion(ArrayList<Product> array) {
-		for(int i=1;i<array.size(); i++) {
-			for(int j=i; j>0 && array.get(j-1).getPrice()>array.get(j).getPrice();j--) {
-				Product temp = array.get(j);
-				array.set(j,array.get(j-1));
-				array.set(j-1,temp);
-			}
+	public void sortEmployeeBySurnameAndName() {
+		Comparator<Employee> employeeComparator = new EmployeeSurnameAndNameComparator();
+		Collections.sort(employees, employeeComparator);
+	}
 
-		}
+	public void sortUserByUsername() {
+		Comparator<User> userComparator = new UserUsernameComparator();
+		Collections.sort(users, userComparator);
 	}
 
 	public void sortIngredientBySelection(ArrayList<Ingredient> array) {
@@ -147,19 +165,22 @@ public class Restaurant {
 				}
 			}
 			array.get(i).setName(min);
-
 		}
 	}
+
+	//Search methods.
 
 	public Product searchProduct(String name) {
 		Product foundProduct = null;
-		int index = binarySearchForProduct(name);
-		if(index >= 0) {
-			foundProduct = products.get(index);
+		boolean found = false;
+		for(Product p: products) {
+			if(p.getName().equals(name) && !found) {
+				foundProduct = p;
+			}
 		}
 		return foundProduct;
 	}
-	
+
 	public ProductType searchProductType(String name) {
 		ProductType foundProductType = null;
 		int index = binarySearchForProductType(name);
@@ -177,55 +198,43 @@ public class Restaurant {
 		}
 		return foundIngredient;
 	}
-	
+
 	public Client searchClient(String name) {
 		Client foundClient = null;
-		int index = binarySearchForClient(name);
-		if(index >= 0) {
-			foundClient = clients.get(index);
+		boolean found = false;
+		for(Client c: clients) {
+			if(c.getName().equals(name) && !found) {
+				foundClient = c;
+				found = true;
+			}
 		}
 		return foundClient;
 	}
-	
+
 	public Employee searchEmployee(String name) {
 		Employee foundEmployee = null;
-		int index = binarySearchForEmployee(name);
-		if(index >= 0) {
-			foundEmployee = employees.get(index);
+		boolean found = false;
+		for(Employee e: employees) {
+			if(e.getName().equals(name) && !found) {
+				foundEmployee = e;
+				found = true;
+			}
 		}
 		return foundEmployee;
 	}
 
 	public User searchUser(String username) {
 		User foundUser = null;
-		int index = binarySearchForUser(username);
-		if(index >= 0) {
-			foundUser = users.get(index);
+		boolean found = false;
+		for(User u: users) {
+			if(u.getUsername().equals(username) && !found) {
+				foundUser = u;
+				found = true;
+			}
 		}
 		return foundUser;
 	}
 
-	public int binarySearchForProduct(String name) {
-		int pos = -1;
-		int i = 0;
-		int j = products.size()-1;
-
-		while(i <= j && pos < 0) {
-			int middle = (i+j)/2;
-			System.out.println(products.get(middle).getName());
-			System.out.println(name);
-			System.out.println(products.get(middle).getName().compareTo(name));
-			if(products.get(middle).getName().compareTo(name) == 0) {
-				pos = middle;
-			}else if(products.get(middle).getName().compareTo(name) < 0) {
-				j = middle-1;
-			}else {
-				i = middle+1;
-			}
-		}
-		return pos;
-	}
-	
 	public int binarySearchForProductType(String name) {
 		int pos = -1;
 		int i = 0;
@@ -261,62 +270,6 @@ public class Restaurant {
 		}
 		return pos;
 	}
-	
-	public int binarySearchForClient(String name) {
-		int pos = -1;
-		int i = 0;
-		int j = clients.size()-1;
-
-		while(i <= j && pos < 0) {
-			int middle = (i+j)/2;
-			if(clients.get(middle).getName().compareTo(name) == 0) {
-				pos = middle;
-			}else if(clients.get(middle).getName().compareTo(name) < 0) {
-				j = middle-1;
-			}else {
-				i = middle+1;
-			}
-		}
-		return pos;
-	}
-	
-	public int binarySearchForEmployee(String name) {
-		int pos = -1;
-		int i = 0;
-		int j = employees.size()-1;
-
-		while(i <= j && pos < 0) {
-			int middle = (i+j)/2;
-			if(employees.get(middle).getName().compareTo(name) == 0) {
-				pos = middle;
-			}else if(employees.get(middle).getName().compareTo(name) < 0) {
-				j = middle-1;
-			}else {
-				i = middle+1;
-			}
-		}
-		return pos;
-	}
-
-	public int binarySearchForUser(String username) {
-		int pos = -1;
-		int i = 0;
-		int j = users.size()-1;
-
-		while(i <= j && pos < 0) {
-			int middle = (i+j)/2;
-			if(users.get(middle).getUsername().compareTo(username) == 0) {
-				pos = middle;
-			}else if(users.get(middle).getUsername().compareTo(username) > 0) {
-				j = middle-1;
-			}else {
-				i = middle+1;
-			}
-		}
-		return pos;
-	}
-
-
 
 	//Add methods.
 
@@ -347,7 +300,7 @@ public class Restaurant {
 	public void addEmployee(String name, String surname, int ID) {
 		Employee employee = new Employee(name, surname, ID);
 		employees.add(employee);
-		Collections.sort(employees);
+		sortEmployeeBySurnameAndName();
 	}
 
 	public void addUser(String name, String surname, int iD, String username, String password) {
@@ -356,14 +309,14 @@ public class Restaurant {
 			User newUser = new User(name, surname, iD, username, password);
 			users.add(newUser);
 			employees.add(newUser);
-			Collections.sort(users);
-			Collections.sort(employees);
+			sortUserByUsername();
+			sortEmployeeBySurnameAndName();
 		}
 	}
 
-	public void addOrder(List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User user) {
+	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		int orderCode = 0;
-		Order order = new Order(orderCode, products, quantity, client, employeeWhoDelivered, observations, user);
+		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
 	}
@@ -800,14 +753,6 @@ public class Restaurant {
 			actualUser = user;
 		}
 		return canLogIn;
-	}
-
-	public User getActualUser() {
-		return actualUser;
-	}
-
-	public void setActualUser(User actualUser) {
-		this.actualUser = actualUser;
 	}
 
 }

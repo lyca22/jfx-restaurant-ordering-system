@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
@@ -27,6 +28,7 @@ import javafx.scene.layout.VBox;
 import model.Client;
 import model.Employee;
 import model.Ingredient;
+import model.OrderState;
 import model.Product;
 import model.ProductSize;
 import model.ProductType;
@@ -314,14 +316,14 @@ public class RestaurantGUI {
 		tcProductPrice.setCellValueFactory(new PropertyValueFactory<model.Product, String>("price"));
 
 	}
-	
+
 	private void initializeProductTypeTableView() {
 		ObservableList<model.ProductType> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getProductTypes());
 		tvProductTypes.setItems(observableList);
 		tcProductTypeName.setCellValueFactory(new PropertyValueFactory<model.ProductType, String>("name"));
 	}
-	
+
 	private void initializeIngredientsTableView() {
 		ObservableList<model.Ingredient> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getIngredients());
@@ -423,7 +425,7 @@ public class RestaurantGUI {
 		loadTable("productType-table-view.fxml");
 		initializeProductTypeTableView();
 	}
-	
+
 	public void viewIngredients() {
 		loadTable("ingredient-table-view.fxml");
 		initializeIngredientsTableView();
@@ -505,6 +507,7 @@ public class RestaurantGUI {
 				}
 				int productPrice = Integer.parseInt(txtProductPrice.getText());
 				restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
+				viewProducts();
 			}
 			return null;
 		});
@@ -517,6 +520,7 @@ public class RestaurantGUI {
 			if (dialogButton == acceptButtonType) {
 				String productTypeName = txtIngredientName.getText();
 				restaurant.addProductType(productTypeName, restaurant.getActualUser());
+				viewProductTypes();
 			}
 			return null;
 		});
@@ -529,6 +533,7 @@ public class RestaurantGUI {
 			if (dialogButton == acceptButtonType) {
 				String ingredientName = txtIngredientName.getText();
 				restaurant.addIngredient(ingredientName, restaurant.getActualUser());
+				viewIngredients();
 			}
 			return null;
 		});
@@ -546,6 +551,7 @@ public class RestaurantGUI {
 				int clientPhone = Integer.parseInt(txtClientPhone.getText());
 				String clientObservations = txtClientObservations.getText();
 				restaurant.addClient(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
+				viewClients();
 			}
 			return null;
 		});
@@ -560,6 +566,7 @@ public class RestaurantGUI {
 				String employeeSurname = txtEmployeeSurname.getText();
 				int employeeID = Integer.parseInt(txtEmployeeID.getText());
 				restaurant.addEmployee(employeeName, employeeSurname, employeeID);
+				viewEmployees();
 			}
 			return null;
 		});
@@ -581,6 +588,7 @@ public class RestaurantGUI {
 				String userUsername = txtUserUsername.getText();
 				String userPassword = txtUserPassword.getText();
 				restaurant.updateUser(restaurant.getActualUser(), userName, userSurname, userID, userUsername, userPassword);
+				viewUsers();
 			}
 			return null;
 		});
@@ -653,8 +661,10 @@ public class RestaurantGUI {
 						}
 					}
 				}
+				LocalDateTime date = LocalDateTime.now();
 				String observations = txtOrderObservations.getText();
-				restaurant.addOrder(orderProducts, orderProductQuantity, client, employee, observations, restaurant.getActualUser());
+				restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+				viewOrders();
 			}
 			return null;
 		});

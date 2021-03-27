@@ -1,6 +1,6 @@
 package model;
 
-public class Employee implements Comparable<Employee>{
+public class Employee {
 	
 	private String name;
 	private String surname;
@@ -44,11 +44,6 @@ public class Employee implements Comparable<Employee>{
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-	}
-
-	@Override
-	public int compareTo(Employee o) {
-		return name.compareTo(o.getName());
 	}
 	
 }

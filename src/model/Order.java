@@ -1,7 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class Order implements Comparable<Order>{
@@ -12,19 +12,19 @@ public class Order implements Comparable<Order>{
 	private List<Integer> quantity;
 	private Client client;
 	private Employee employeeWhoDelivered;
-	private Date date;
+	private LocalDateTime date;
 	private String observations;
 	private User userWhoCreated;
 	private User lastUserWhoModified;
 
-	public Order(int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User user) {
+	public Order(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		setOrderCode(orderCode);
-		setOrderState(OrderState.Requested);
+		setOrderState(orderstate);
 		setProducts(products);
 		setQuantity(quantity);
 		setClient(client);
 		setEmployeeWhoDelivered(employeeWhoDelivered);
-		date = new Date();
+		setDate(date);
 		setObservations(observations);
 		userWhoCreated = user;
 		lastUserWhoModified = user;
@@ -78,11 +78,11 @@ public class Order implements Comparable<Order>{
 		this.employeeWhoDelivered = employeeWhoDelivered;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
