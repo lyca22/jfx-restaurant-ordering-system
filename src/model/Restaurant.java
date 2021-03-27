@@ -322,7 +322,7 @@ public class Restaurant {
 		orders.add(order);
 		Collections.sort(orders);
 	}
-	
+
 	public void addOrder(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
@@ -530,18 +530,47 @@ public class Restaurant {
 
 	//Report generating methods.
 
-	public void generateOrderReport(String fileName, String separator) throws FileNotFoundException {
+	public void generateOrderReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
+		for (int i = 0; i < orders.size(); i++) {
+			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
+				pw.println(orders.get(i).getClient().getName()+separator+orders.get(i).getClient().getAddress()+separator+orders.get(i).getClient().getPhoneNumber()+separator+orders.get(i).getEmployeeWhoDelivered().getName()+separator+orders.get(i).getDate().toString()+separator+orders.get(i).getObservations());
+			}
 
-		//Pending
+		}
 
 		pw.close();
 	}
 
-	public void generateEmployeeReport(String fileName, String separator) throws FileNotFoundException {
+	public void generateEmployeeReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
+		ArrayList<Employee> employee = new ArrayList<>();
+		ArrayList<Integer> employeeQuantity = new ArrayList<>();
+		ArrayList<Integer> priceProduct = new ArrayList<>();
+		int count = 0;
+		int index = 0;
+		int price = 0;
 
-		//Pending
+		for (int i = 0; i < orders.size(); i++) {
+			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
+				if(!employee.contains(orders.get(i).getEmployeeWhoDelivered())) {
+					employee.add(orders.get(i).getEmployeeWhoDelivered());
+					employeeQuantity.set(i, 1);
+					//priceProduct.set(i, orders.get(i).getPrice());
+				}else {
+					index = employee.indexOf(orders.get(i).getEmployeeWhoDelivered());
+					count = employeeQuantity.get(index)+1;
+					//price = priceProduct.get(index)+orders.get(i).getPrice();
+					employeeQuantity.set(index, count);
+					priceProduct.set(index, price);
+				}
+			}
+
+		}
+
+		for (int i = 0; i < employee.size(); i++) {
+			pw.println(employee.get(i).getName()+separator+employeeQuantity.get(i)+separator+priceProduct.get(i));
+		}
 
 		pw.close();
 	}
@@ -549,7 +578,9 @@ public class Restaurant {
 	public void generateProductReport(String fileName, String separator) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
 
-		//Pending
+		/*ArrayList<Product> product = new ArrayList<>();
+		ArrayList<Integer> productQuantity = new ArrayList<>();
+		ArrayList<Integer> priceProduct = new ArrayList<>();*/
 
 		pw.close();
 	}
@@ -582,15 +613,15 @@ public class Restaurant {
 		String line = br.readLine();
 		while(line != null) {
 			String[] productsData = line.split(separator);
-			
+
 			String name = productsData[0];
-			
+
 			ProductType productType = new ProductType(productsData[1], null);
 			String[] ingredientList = productsData[2].split(",");
 			for (int i = 0; i < ingredientList.length; i++) {
 				addIngredient(ingredientList[i], actualUser);
 			}
-			
+
 			String productSizeTxt = productsData[3]; 
 			ProductSize productSize = ProductSize.Meal_Box_For_One;
 			switch(productSizeTxt) {
@@ -601,9 +632,9 @@ public class Restaurant {
 				productSize = ProductSize.Meal_Box_For_Two;
 				break;
 			}
-			
+
 			int price = Integer.parseInt(productsData[4]);
-	
+
 			addProduct(name, productType, ingredients, productSize, price, actualUser);
 			line = br.readLine();
 
@@ -618,9 +649,9 @@ public class Restaurant {
 		String line = br.readLine();
 		while(line != null) {
 			String[] ordersData = line.split(separator);
-			
+
 			int orderCode = Integer.parseInt(ordersData[0]);
-			
+
 			String orderStateTxt = ordersData[1];
 			OrderState orderState = OrderState.Requested;
 			switch(orderStateTxt) {
@@ -637,13 +668,13 @@ public class Restaurant {
 				orderState = OrderState.Delivered;
 				break;
 			}
-						
+
 			List<Product> products = new ArrayList<Product>();
 			String[] productsList = ordersData[2].split(",");
-			
+
 			List<Integer> quantity = new ArrayList<Integer>();
 			String[] quantityList = ordersData[3].split(",");
-			
+
 			for (int i = 0; i < productsList.length; i++) {
 				Product productFound = searchProduct(productsList[i]);
 				if (productFound != null) {
@@ -651,28 +682,28 @@ public class Restaurant {
 					quantity.add(Integer.parseInt(quantityList[i]));
 				}
 			}
-			
+
 			String[] clientNameAndSurname = ordersData[4].split(" ");
 			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], 0, "", 0, "", actualUser);
-			
+
 			String[] employeeNameAndSurname = ordersData[5].split(" ");
 			Employee employee = addEmployee(employeeNameAndSurname[0], employeeNameAndSurname[1], 0);
-			
+
 			String[] dateInfo = ordersData[6].split("-");
 			String[] dayAndTimeInfo = dateInfo[2].split(" ");
 			String[] timeInfo = dayAndTimeInfo[1].split(":");
 			LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateInfo[0]), Integer.parseInt(dateInfo[1]), Integer.parseInt(dayAndTimeInfo[0]), Integer.parseInt(timeInfo[0]), Integer.parseInt(timeInfo[1]), Integer.parseInt(timeInfo[2]));
-			
+
 			String observations = ordersData[7];
-			
+
 			addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, actualUser);
 			line = br.readLine();
 		}
 
 		br.close();
 	}
-	
-	
+
+
 
 	//Save methods
 
