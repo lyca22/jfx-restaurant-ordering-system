@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -268,6 +270,27 @@ public class RestaurantGUI {
 
 	@FXML
 	private TextField txtOrderObservations;
+
+	@FXML
+	private DatePicker DpMInDate;
+
+	@FXML
+	private DatePicker DpMaxDate;
+
+	@FXML
+	private TextField txtFileExportOrder;
+
+	@FXML
+	private TextField txtSeparator;
+
+	@FXML
+	private TextField txtMinHour;
+
+	@FXML
+	private TextField txtMaxHour;
+	
+	@FXML
+    private Label labelTitle;
 
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
@@ -739,16 +762,84 @@ public class RestaurantGUI {
 		}
 	}
 
-	public void exportProducts() {
+	public void exportOrders() {
+		ButtonType acceptButtonType = openWindow("export-report.fxml");
+		labelTitle.setText("Reporte de ordenes");
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String fileName = txtFileExportOrder.getText();
+				String separator = txtSeparator.getText();
+				String[] min = DpMInDate.getValue().toString().split("/");
+				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String [] minHour = txtMinHour.getText().split(":");
+				String [] maxHour = txtMaxHour.getText().split(":");
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
 
+				try {
+					restaurant.generateOrderReport(fileName, separator, minDate, maxDate);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				viewOrders();
+			}
+			return null;
+		});
+		dialog.showAndWait();
 	}
 
 	public void exportEmployees() {
+		ButtonType acceptButtonType = openWindow("export-report.fxml");
+		labelTitle.setText("Reporte de empleados");
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String fileName = txtFileExportOrder.getText();
+				String separator = txtSeparator.getText();
+				String[] min = DpMInDate.getValue().toString().split("/");
+				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String [] minHour = txtMinHour.getText().split(":");
+				String [] maxHour = txtMaxHour.getText().split(":");
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
 
+				try {
+					restaurant.generateEmployeeReport(fileName, separator, minDate, maxDate);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				viewOrders();
+			}
+			return null;
+		});
+		dialog.showAndWait();
 	}
 
-	public void exportOrders() {
 
+	public void exportProducts() {
+		ButtonType acceptButtonType = openWindow("export-report.fxml");
+		labelTitle.setText("Reporte de productos");
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String fileName = txtFileExportOrder.getText();
+				String separator = txtSeparator.getText();
+				String[] min = DpMInDate.getValue().toString().split("/");
+				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String [] minHour = txtMinHour.getText().split(":");
+				String [] maxHour = txtMaxHour.getText().split(":");
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
+
+				try {
+					restaurant.generateProductReport(fileName, separator, minDate, maxDate);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				viewOrders();
+			}
+			return null;
+		});
+		dialog.showAndWait();
 	}
-
+	
 }
+
