@@ -16,6 +16,7 @@ public class Order implements Comparable<Order>{
 	private String observations;
 	private User userWhoCreated;
 	private User lastUserWhoModified;
+	private int price;
 
 	public Order(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		setOrderCode(orderCode);
@@ -28,8 +29,8 @@ public class Order implements Comparable<Order>{
 		setObservations(observations);
 		userWhoCreated = user;
 		lastUserWhoModified = user;
+		setPrice();
 	}
-	
 
 	public int getOrderCode() {
 		return orderCode;
@@ -163,4 +164,16 @@ public class Order implements Comparable<Order>{
 		String text = getEmployeeWhoDelivered().getName();
 		return text;
 	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice() {
+		price = 0;
+		for(int i = 0; i < products.size(); i++) {
+			price += products.get(i).getPrice()*quantity.get(i);
+		}
+	}
+
 }

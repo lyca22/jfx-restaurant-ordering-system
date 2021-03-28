@@ -555,12 +555,12 @@ public class Restaurant {
 			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
 				if(!employee.contains(orders.get(i).getEmployeeWhoDelivered())) {
 					employee.add(orders.get(i).getEmployeeWhoDelivered());
-					employeeQuantity.set(i, 1);
-					//priceProduct.set(i, orders.get(i).getPrice());
+					employeeQuantity.add(1);
+					priceProduct.add(orders.get(i).getPrice());
 				}else {
 					index = employee.indexOf(orders.get(i).getEmployeeWhoDelivered());
 					count = employeeQuantity.get(index)+1;
-					//price = priceProduct.get(index)+orders.get(i).getPrice();
+					price = priceProduct.get(index)+orders.get(i).getPrice();
 					employeeQuantity.set(index, count);
 					priceProduct.set(index, price);
 				}
@@ -575,13 +575,45 @@ public class Restaurant {
 		pw.close();
 	}
 
-	public void generateProductReport(String fileName, String separator) throws FileNotFoundException {
+	public void generateProductReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
 
-		/*ArrayList<Product> product = new ArrayList<>();
+		ArrayList<Product> products = new ArrayList<>();
 		ArrayList<Integer> productQuantity = new ArrayList<>();
-		ArrayList<Integer> priceProduct = new ArrayList<>();*/
+		ArrayList<Integer> priceProduct = new ArrayList<>();
 
+		int count = 0;
+		int index = 0;
+		int price = 0;
+		Product product;
+		int quantity;
+		
+		for (int i = 0; i < orders.size(); i++) {
+			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
+				for(int j = 0; j < orders.get(i).getProducts().size(); j++) {
+					product = orders.get(i).getProducts().get(j);
+					quantity = orders.get(i).getQuantity().get(j);
+					if(!products.contains(product)) {
+						products.add(product);
+						productQuantity.add(quantity);
+						priceProduct.add(product.getPrice()*quantity);
+					}else {
+						index = products.indexOf(product);
+						count = productQuantity.get(index)+quantity;
+						price = priceProduct.get(index)+product.getPrice()*quantity;
+						productQuantity.set(index, count);
+						priceProduct.set(index, price);
+					}
+				}
+				
+			}
+
+		}
+
+		for (int i = 0; i < products.size(); i++) {
+			pw.println(products.get(i).getName()+separator+productQuantity.get(i)+separator+priceProduct.get(i));
+		}
+		
 		pw.close();
 	}
 
