@@ -702,9 +702,7 @@ public class Restaurant {
 
 		br.close();
 	}
-
-
-
+	
 	//Save methods
 
 	public void saveName() throws FileNotFoundException, IOException {
