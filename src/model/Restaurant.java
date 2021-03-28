@@ -275,21 +275,27 @@ public class Restaurant {
 	//Add methods.
 
 	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
-		Product product = new Product(name, productType, ingredients, productSize, price, user);
-		products.add(product);
-		sortProductByInsertion(products);
+		if(searchProduct(name) == null) {
+			Product product = new Product(name, productType, ingredients, productSize, price, user);
+			products.add(product);
+			sortProductByInsertion(products);
+		}
 	}
 
 	public void addProductType(String name, User user) {
-		ProductType productType = new ProductType(name, user);
-		productTypes.add(productType);
-		Collections.sort(productTypes);
+		if(searchProductType(name) == null) {
+			ProductType productType = new ProductType(name, user);
+			productTypes.add(productType);
+			Collections.sort(productTypes);
+		}
 	}
 
 	public void addIngredient(String name, User user) {
-		Ingredient ingredient = new Ingredient(name, user);
-		ingredients.add(ingredient);
-		sortIngredientBySelection(ingredients);
+		if(searchIngredient(name) == null) {
+			Ingredient ingredient = new Ingredient(name, user);
+			ingredients.add(ingredient);
+			sortIngredientBySelection(ingredients);
+		}
 	}
 
 	public Client addClient(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) {
@@ -320,7 +326,7 @@ public class Restaurant {
 	public int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
 	}
-	
+
 	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
 		int orderCode = getRandomNumber(0, Integer.MAX_VALUE);
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
