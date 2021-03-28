@@ -3,9 +3,9 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -288,9 +288,9 @@ public class RestaurantGUI {
 
 	@FXML
 	private TextField txtMaxHour;
-	
+
 	@FXML
-    private Label labelTitle;
+	private Label labelTitle;
 
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
@@ -505,34 +505,43 @@ public class RestaurantGUI {
 		cbProductSize.getItems().addAll("Caja personal", "Caja para dos");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String productName = txtProductName.getText();
-				ProductType productType = restaurant.searchProductType(cbProductType.getSelectionModel().getSelectedItem().toString());
-				CheckBox checkBox;
-				ArrayList<Ingredient> productIngredients = new ArrayList<>();
-				Ingredient ingredient;
-				for(int i = 0; i < vbProductIngredients.getChildren().size(); i++) {
-					if(vbProductIngredients.getChildren().get(i) instanceof CheckBox) {
-						checkBox = (CheckBox) vbProductIngredients.getChildren().get(i);
-						if (checkBox.isSelected()) {
-							ingredient = restaurant.searchIngredient(checkBox.getText());
-							if(ingredient != null) {
-								productIngredients.add(ingredient);
+				try {
+					String productName = txtProductName.getText();
+					ProductType productType = restaurant.searchProductType(cbProductType.getSelectionModel().getSelectedItem().toString());
+					CheckBox checkBox;
+					ArrayList<Ingredient> productIngredients = new ArrayList<>();
+					Ingredient ingredient;
+					for(int i = 0; i < vbProductIngredients.getChildren().size(); i++) {
+						if(vbProductIngredients.getChildren().get(i) instanceof CheckBox) {
+							checkBox = (CheckBox) vbProductIngredients.getChildren().get(i);
+							if (checkBox.isSelected()) {
+								ingredient = restaurant.searchIngredient(checkBox.getText());
+								if(ingredient != null) {
+									productIngredients.add(ingredient);
+								}
 							}
 						}
 					}
+					ProductSize productSize = ProductSize.Meal_Box_For_One;
+					switch (cbProductSize.getSelectionModel().getSelectedItem().toString()) {
+					case "Caja personal":
+						productSize = ProductSize.Meal_Box_For_One;
+						break;
+					case "Caja para dos":
+						productSize = ProductSize.Meal_Box_For_Two;
+						break;
+					}
+					int productPrice = Integer.parseInt(txtProductPrice.getText());
+					if(!productName.isEmpty()) {
+						restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
+						viewProducts();
+						System.out.println("Done");
+					}
+				}catch(NullPointerException npe) {
+					System.out.println("npe");
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
 				}
-				ProductSize productSize = ProductSize.Meal_Box_For_One;
-				switch (cbProductSize.getSelectionModel().getSelectedItem().toString()) {
-				case "Caja personal":
-					productSize = ProductSize.Meal_Box_For_One;
-					break;
-				case "Caja para dos":
-					productSize = ProductSize.Meal_Box_For_Two;
-					break;
-				}
-				int productPrice = Integer.parseInt(txtProductPrice.getText());
-				restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
-				viewProducts();
 			}
 			return null;
 		});
@@ -544,8 +553,10 @@ public class RestaurantGUI {
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
 				String productTypeName = txtIngredientName.getText();
-				restaurant.addProductType(productTypeName, restaurant.getActualUser());
-				viewProductTypes();
+				if(!productTypeName.isEmpty()) {
+					restaurant.addProductType(productTypeName, restaurant.getActualUser());
+					viewProductTypes();
+				}
 			}
 			return null;
 		});
@@ -557,8 +568,10 @@ public class RestaurantGUI {
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
 				String ingredientName = txtIngredientName.getText();
-				restaurant.addIngredient(ingredientName, restaurant.getActualUser());
-				viewIngredients();
+				if(!ingredientName.isEmpty()) {
+					restaurant.addIngredient(ingredientName, restaurant.getActualUser());
+					viewIngredients();
+				}
 			}
 			return null;
 		});
@@ -569,14 +582,20 @@ public class RestaurantGUI {
 		ButtonType acceptButtonType = openWindow("add-client.fxml");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String clientName = txtClientName.getText();
-				String clientSurname = txtClientSurname.getText();
-				int clientID = Integer.parseInt(txtClientID.getText());
-				String clientAddress = txtClientAddress.getText();
-				int clientPhone = Integer.parseInt(txtClientPhone.getText());
-				String clientObservations = txtClientObservations.getText();
-				restaurant.addClient(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
-				viewClients();
+				try {
+					String clientName = txtClientName.getText();
+					String clientSurname = txtClientSurname.getText();
+					int clientID = Integer.parseInt(txtClientID.getText());
+					String clientAddress = txtClientAddress.getText();
+					BigInteger clientPhone = new BigInteger(txtClientPhone.getText());
+					String clientObservations = txtClientObservations.getText();
+					if(!clientName.isEmpty() && !clientSurname.isEmpty() && !clientAddress.isEmpty()) {
+						restaurant.addClient(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
+						viewClients();
+					}
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
 			}
 			return null;
 		});
@@ -587,11 +606,17 @@ public class RestaurantGUI {
 		ButtonType acceptButtonType = openWindow("add-employee.fxml");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String employeeName = txtEmployeeName.getText();
-				String employeeSurname = txtEmployeeSurname.getText();
-				int employeeID = Integer.parseInt(txtEmployeeID.getText());
-				restaurant.addEmployee(employeeName, employeeSurname, employeeID);
-				viewEmployees();
+				try {
+					String employeeName = txtEmployeeName.getText();
+					String employeeSurname = txtEmployeeSurname.getText();
+					int employeeID = Integer.parseInt(txtEmployeeID.getText());
+					if(!employeeName.isEmpty() && !employeeSurname.isEmpty()) {
+						restaurant.addEmployee(employeeName, employeeSurname, employeeID);
+						viewEmployees();
+					}
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
 			}
 			return null;
 		});
@@ -607,13 +632,20 @@ public class RestaurantGUI {
 		txtUserPassword.setText(restaurant.getActualUser().getPassword());
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String userName = txtUserName.getText();
-				String userSurname = txtUserSurname.getText();
-				int userID = Integer.parseInt(txtUserID.getText());
-				String userUsername = txtUserUsername.getText();
-				String userPassword = txtUserPassword.getText();
-				restaurant.updateUser(restaurant.getActualUser(), userName, userSurname, userID, userUsername, userPassword);
-				viewUsers();
+				try {
+					String userName = txtUserName.getText();
+					String userSurname = txtUserSurname.getText();
+					int userID = Integer.parseInt(txtUserID.getText());
+					String userUsername = txtUserUsername.getText();
+					String userPassword = txtUserPassword.getText();
+					if(!userName.isEmpty() && !userSurname.isEmpty() && !userUsername.isEmpty() && !userPassword.isEmpty()) {
+						restaurant.updateUser(restaurant.getActualUser(), userName, userSurname, userID, userUsername, userPassword);
+						viewUsers();
+					}
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
+				
 			}
 			return null;
 		});
@@ -647,49 +679,51 @@ public class RestaurantGUI {
 		}
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				HBox hbox;
-				Label label;
-				TextField textField;
-				ArrayList<Product> orderProducts = new ArrayList<>();
-				ArrayList<Integer> orderProductQuantity = new ArrayList<>();
-				Product product;
-				for(int i = 0; i < vbOrderProducts.getChildren().size(); i++) {
-					hbox = (HBox) vbOrderProducts.getChildren().get(i);
-					for(int j = 0; j < hbox.getChildren().size(); j++) {
-						if(hbox.getChildren().get(j) instanceof TextField) {
-							label = (Label) hbox.getChildren().get(j-1);
-							textField = (TextField) hbox.getChildren().get(j);
-							product = restaurant.searchProduct(label.getText());
-							if(product != null) {
-								orderProducts.add(product);
-								orderProductQuantity.add(Integer.parseInt(textField.getText()));
+					HBox hbox;
+					Label label;
+					TextField textField;
+					ArrayList<Product> orderProducts = new ArrayList<>();
+					ArrayList<Integer> orderProductQuantity = new ArrayList<>();
+					Product product;
+					for(int i = 0; i < vbOrderProducts.getChildren().size(); i++) {
+						hbox = (HBox) vbOrderProducts.getChildren().get(i);
+						for(int j = 0; j < hbox.getChildren().size(); j++) {
+							if(hbox.getChildren().get(j) instanceof TextField) {
+								label = (Label) hbox.getChildren().get(j-1);
+								textField = (TextField) hbox.getChildren().get(j);
+								product = restaurant.searchProduct(label.getText());
+								if(product != null && Integer.parseInt(textField.getText()) > 0) {
+									orderProducts.add(product);
+									orderProductQuantity.add(Integer.parseInt(textField.getText()));
+								}
 							}
 						}
 					}
-				}
-				RadioButton radioButton;
-				Client client = null;
-				for(int i = 0; i < vbOrderClients.getChildren().size(); i++) {
-					if(vbOrderClients.getChildren().get(i) instanceof RadioButton) {
-						radioButton = (RadioButton) vbOrderClients.getChildren().get(i);
-						if (radioButton.isSelected()) {
-							client = restaurant.searchClient(radioButton.getText());
+					RadioButton radioButton;
+					Client client = null;
+					for(int i = 0; i < vbOrderClients.getChildren().size(); i++) {
+						if(vbOrderClients.getChildren().get(i) instanceof RadioButton) {
+							radioButton = (RadioButton) vbOrderClients.getChildren().get(i);
+							if (radioButton.isSelected()) {
+								client = restaurant.searchClient(radioButton.getText());
+							}
 						}
 					}
-				}
-				Employee employee = null;
-				for(int i = 0; i < vbOrderEmployee.getChildren().size(); i++) {
-					if(vbOrderEmployee.getChildren().get(i) instanceof RadioButton) {
-						radioButton = (RadioButton) vbOrderEmployee.getChildren().get(i);
-						if (radioButton.isSelected()) {
-							employee = restaurant.searchEmployee(radioButton.getText());
+					Employee employee = null;
+					for(int i = 0; i < vbOrderEmployee.getChildren().size(); i++) {
+						if(vbOrderEmployee.getChildren().get(i) instanceof RadioButton) {
+							radioButton = (RadioButton) vbOrderEmployee.getChildren().get(i);
+							if (radioButton.isSelected()) {
+								employee = restaurant.searchEmployee(radioButton.getText());
+							}
 						}
 					}
-				}
-				LocalDateTime date = LocalDateTime.now();
-				String observations = txtOrderObservations.getText();
-				restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
-				viewOrders();
+					LocalDateTime date = LocalDateTime.now();
+					String observations = txtOrderObservations.getText();
+					if(!orderProducts.isEmpty() && client != null && employee != null) {
+						restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+						viewOrders();
+					}
 			}
 			return null;
 		});
@@ -767,14 +801,15 @@ public class RestaurantGUI {
 		labelTitle.setText("Reporte de ordenes");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String fileName = txtFileExportOrder.getText();
+				String fileName = txtFileExportOrder.getText()+".txt";
 				String separator = txtSeparator.getText();
-				String[] min = DpMInDate.getValue().toString().split("/");
-				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String[] min = DpMInDate.getValue().toString().split("-");
+				String[] max = DpMaxDate.getValue().toString().split("-"); 
 				String [] minHour = txtMinHour.getText().split(":");
 				String [] maxHour = txtMaxHour.getText().split(":");
-				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
-				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
+
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[0]), Integer.parseInt(min[1]), Integer.parseInt(min[2]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[0]), Integer.parseInt(max[1]), Integer.parseInt(max[2]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
 
 				try {
 					restaurant.generateOrderReport(fileName, separator, minDate, maxDate);
@@ -793,14 +828,15 @@ public class RestaurantGUI {
 		labelTitle.setText("Reporte de empleados");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String fileName = txtFileExportOrder.getText();
+				String fileName = txtFileExportOrder.getText()+".txt";
 				String separator = txtSeparator.getText();
-				String[] min = DpMInDate.getValue().toString().split("/");
-				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String[] min = DpMInDate.getValue().toString().split("-");
+				String[] max = DpMaxDate.getValue().toString().split("-"); 
 				String [] minHour = txtMinHour.getText().split(":");
 				String [] maxHour = txtMaxHour.getText().split(":");
-				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
-				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
+
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[0]), Integer.parseInt(min[1]), Integer.parseInt(min[2]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[0]), Integer.parseInt(max[1]), Integer.parseInt(max[2]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
 
 				try {
 					restaurant.generateEmployeeReport(fileName, separator, minDate, maxDate);
@@ -820,14 +856,15 @@ public class RestaurantGUI {
 		labelTitle.setText("Reporte de productos");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String fileName = txtFileExportOrder.getText();
+				String fileName = txtFileExportOrder.getText()+".txt";
 				String separator = txtSeparator.getText();
-				String[] min = DpMInDate.getValue().toString().split("/");
-				String[] max = DpMaxDate.getValue().toString().split("/"); 
+				String[] min = DpMInDate.getValue().toString().split("-");
+				String[] max = DpMaxDate.getValue().toString().split("-"); 
 				String [] minHour = txtMinHour.getText().split(":");
 				String [] maxHour = txtMaxHour.getText().split(":");
-				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[2]), Integer.parseInt(min[1]), Integer.parseInt(min[0]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
-				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[2]), Integer.parseInt(max[1]), Integer.parseInt(max[0]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
+
+				LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[0]), Integer.parseInt(min[1]), Integer.parseInt(min[2]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+				LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[0]), Integer.parseInt(max[1]), Integer.parseInt(max[2]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
 
 				try {
 					restaurant.generateProductReport(fileName, separator, minDate, maxDate);
@@ -840,6 +877,6 @@ public class RestaurantGUI {
 		});
 		dialog.showAndWait();
 	}
-	
+
 }
 

@@ -37,16 +37,16 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Importar">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#importProduct" text="Información de productos" />
-                  <MenuItem mnemonicParsing="false" onAction="#importClient" text="Información de clientes" />
-                  <MenuItem mnemonicParsing="false" onAction="#importOrder" text="Información de órdenes" />
+                  <MenuItem mnemonicParsing="false" onAction="#importProducts" text="Información de productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#importClients" text="Información de clientes" />
+                  <MenuItem mnemonicParsing="false" onAction="#importOrders" text="Información de órdenes" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Exportar">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Información de productos" />
-                  <MenuItem mnemonicParsing="false" text="Información de empleados" />
-                  <MenuItem mnemonicParsing="false" text="Información de órdenes" />
+                  <MenuItem mnemonicParsing="false" onAction="#exportProducts" text="Información de productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#exportEmployees" text="Información de empleados" />
+                  <MenuItem mnemonicParsing="false" onAction="#exportOrders" text="Información de órdenes" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Cerrar sesión">

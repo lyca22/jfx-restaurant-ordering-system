@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -291,8 +292,8 @@ public class Restaurant {
 		sortIngredientBySelection(ingredients);
 	}
 
-	public Client addClient(String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
-		Client client = new Client(name, surname, ID, address, phoneNumber, observations, user);
+	public Client addClient(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) {
+		Client client = new Client(name, surname, ID, address, clientPhone, observations, user);
 		clients.add(client);
 		sortClientBySurnameAndName();
 		return client;
@@ -316,8 +317,12 @@ public class Restaurant {
 		}
 	}
 
+	public int getRandomNumber(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
+	}
+	
 	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
-		int orderCode = 0;
+		int orderCode = getRandomNumber(0, Integer.MAX_VALUE);
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
@@ -451,7 +456,7 @@ public class Restaurant {
 		ingredient.setLastUserWhoModified(lastUserWhoModified);
 	}
 
-	public void updateClient(Client client, String name, String surname, int ID, String address, int phoneNumber, String observations, User lastUserWhoModified) {
+	public void updateClient(Client client, String name, String surname, int ID, String address, BigInteger phoneNumber, String observations, User lastUserWhoModified) {
 		client.setName(name);
 		client.setSurname(surname);
 		client.setID(ID);
@@ -532,9 +537,16 @@ public class Restaurant {
 
 	public void generateOrderReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(fileName);
+		String text = "";
 		for (int i = 0; i < orders.size(); i++) {
+			text = "";
+			for(int j = 0; j < orders.get(i).getProducts().size(); j++) {
+				Product product = orders.get(i).getProducts().get(j);
+				int quantity = orders.get(i).getQuantity().get(j);
+				text += product.getName()+" "+quantity+" "+product.getPrice()+separator;
+			}
 			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
-				pw.println(orders.get(i).getClient().getName()+separator+orders.get(i).getClient().getAddress()+separator+orders.get(i).getClient().getPhoneNumber()+separator+orders.get(i).getEmployeeWhoDelivered().getName()+separator+orders.get(i).getDate().toString()+separator+orders.get(i).getObservations());
+				pw.println(orders.get(i).getClient().getName()+separator+orders.get(i).getClient().getAddress()+separator+orders.get(i).getClient().getPhoneNumber()+separator+orders.get(i).getEmployeeWhoDelivered().getName()+separator+text+orders.get(i).getDate().toString()+separator+orders.get(i).getObservations());
 			}
 
 		}
@@ -587,7 +599,7 @@ public class Restaurant {
 		int price = 0;
 		Product product;
 		int quantity;
-		
+
 		for (int i = 0; i < orders.size(); i++) {
 			if(orders.get(i).getDate().isAfter(minDate) && orders.get(i).getDate().isBefore(maxDate)) {
 				for(int j = 0; j < orders.get(i).getProducts().size(); j++) {
@@ -605,7 +617,7 @@ public class Restaurant {
 						priceProduct.set(index, price);
 					}
 				}
-				
+
 			}
 
 		}
@@ -613,7 +625,7 @@ public class Restaurant {
 		for (int i = 0; i < products.size(); i++) {
 			pw.println(products.get(i).getName()+separator+productQuantity.get(i)+separator+priceProduct.get(i));
 		}
-		
+
 		pw.close();
 	}
 
@@ -629,7 +641,7 @@ public class Restaurant {
 			String surname = ClientsData[1];
 			int ID = Integer.parseInt(ClientsData[2]);
 			String address = ClientsData[3];
-			int phoneNumber = Integer.parseInt(ClientsData[4]);
+			BigInteger phoneNumber = new BigInteger(ClientsData[4]);
 			String observations = ClientsData[5];
 			addClient(name, surname, ID, address, phoneNumber, observations, actualUser);
 			line = br.readLine();
@@ -716,7 +728,8 @@ public class Restaurant {
 			}
 
 			String[] clientNameAndSurname = ordersData[4].split(" ");
-			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], 0, "", 0, "", actualUser);
+			BigInteger bigInteger = new BigInteger("0");
+			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], 0, "", bigInteger, "", actualUser);
 
 			String[] employeeNameAndSurname = ordersData[5].split(" ");
 			Employee employee = addEmployee(employeeNameAndSurname[0], employeeNameAndSurname[1], 0);
@@ -734,7 +747,7 @@ public class Restaurant {
 
 		br.close();
 	}
-	
+
 	//Save methods
 
 	public void saveName() throws FileNotFoundException, IOException {

@@ -1,23 +1,25 @@
 package model;
 
+import java.math.BigInteger;
+
 public class Client {
 	
 	private String name;
 	private String surname;
 	private int ID;
 	private String address;
-	private int phoneNumber;
+	private BigInteger phoneNumber;
 	private String observations;
 	private User userWhoCreated;
 	private User lastUserWhoModified;
 	private boolean disabled;
 	
-	public Client (String name, String surname, int ID, String address, int phoneNumber, String observations, User user) {
+	public Client (String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) {
 		this.name = name;
 		this.surname = surname;
 		this.ID = ID;
 		this.address = address;
-		this.phoneNumber = phoneNumber;
+		this.phoneNumber = clientPhone;
 		this.observations = observations;
 		userWhoCreated = user;
 		lastUserWhoModified = user;
@@ -56,11 +58,11 @@ public class Client {
 		this.address = address;
 	}
 
-	public int getPhoneNumber() {
+	public BigInteger getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(BigInteger phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
