@@ -275,28 +275,37 @@ public class Restaurant {
 
 	//Add methods.
 
-	public void addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
+	public boolean addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
+		boolean created = false;
 		if(searchProduct(name) == null) {
 			Product product = new Product(name, productType, ingredients, productSize, price, user);
 			products.add(product);
 			sortProductByInsertion(products);
+			created = true;
 		}
+		return created;
 	}
 
-	public void addProductType(String name, User user) {
+	public boolean addProductType(String name, User user) {
+		boolean created = false;
 		if(searchProductType(name) == null) {
 			ProductType productType = new ProductType(name, user);
 			productTypes.add(productType);
 			Collections.sort(productTypes);
+			created = true;
 		}
+		return created;
 	}
 
-	public void addIngredient(String name, User user) {
+	public boolean addIngredient(String name, User user) {
+		boolean created = false;
 		if(searchIngredient(name) == null) {
 			Ingredient ingredient = new Ingredient(name, user);
 			ingredients.add(ingredient);
 			sortIngredientBySelection(ingredients);
+			created = true;
 		}
+		return created;
 	}
 
 	public Client addClient(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) {
@@ -313,7 +322,8 @@ public class Restaurant {
 		return employee;
 	}
 
-	public void addUser(String name, String surname, int iD, String username, String password) {
+	public boolean addUser(String name, String surname, int iD, String username, String password) {
+		boolean created = false;
 		User user = searchUser(username);
 		if(users.size() == 0 || user == null) {
 			User newUser = new User(name, surname, iD, username, password);
@@ -321,7 +331,9 @@ public class Restaurant {
 			employees.add(newUser);
 			sortUserByUsername();
 			sortEmployeeBySurnameAndName();
+			created = true;
 		}
+		return created;
 	}
 
 	public int getRandomNumber(int min, int max) {

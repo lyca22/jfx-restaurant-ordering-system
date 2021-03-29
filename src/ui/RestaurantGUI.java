@@ -47,6 +47,8 @@ public class RestaurantGUI {
 	private ButtonType acceptButtonType;
 	private ButtonType cancelButtonType;
 	private ButtonType deleteButtonType;
+	private ButtonType disableButtonType;
+	private ButtonType enableButtonType;
 	//Main pane.
 
 	@FXML
@@ -205,7 +207,13 @@ public class RestaurantGUI {
 
 	@FXML
 	Dialog<String> dialog;
+	
+	@FXML
+	Dialog<String> alertDialog;
 
+	@FXML
+	ButtonType okayButton;
+	
 	//Product fields.
 
 	@FXML
@@ -343,48 +351,48 @@ public class RestaurantGUI {
 
 	@FXML
 	private TextField txtClientBrowser;
-	
+
 	//User who created/last modified.
-	
+
 	@FXML
 	private Label productsUserCreated;
-	
+
 	@FXML
 	private Label productsUserModified;
-	
+
 	@FXML
 	private Label productTypesUserCreated;
-	
+
 	@FXML
 	private Label productsTypesModified;
-	
+
 	@FXML
 	private Label ingredientsCreated;
-	
+
 	@FXML
 	private Label ingredientsModified;
-	
+
 	@FXML
 	private Label clientsCreated;
-	
+
 	@FXML
 	private Label clientsModified;
-	
+
 	@FXML
 	private Label employeesCreated;
-	
+
 	@FXML
 	private Label employeesModified;
-	
+
 	@FXML
 	private Label ordersCreated;
-	
+
 	@FXML
 	private Label ordersModified;
-	
+
 	@FXML
 	private Label userCreated;
-	
+
 	@FXML
 	private Label userModified;
 
@@ -393,6 +401,11 @@ public class RestaurantGUI {
 		setAcceptButtonType(new ButtonType("Aceptar", ButtonData.APPLY));
 		setCancelButtonType(new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE));
 		setDeleteButtonType(new ButtonType("Borrar", ButtonData.NO));
+		setDisableButtonType(new ButtonType("Deshabilitar", ButtonData.OTHER));
+		setEnableButtonType(new ButtonType("Habilitar", ButtonData.OK_DONE));
+		alertDialog = new Dialog<>();
+		okayButton = new ButtonType("OK", ButtonData.OK_DONE);
+		alertDialog.getDialogPane().getButtonTypes().add(okayButton);
 	}
 
 	public Restaurant getRestaurant() {
@@ -403,6 +416,11 @@ public class RestaurantGUI {
 		this.restaurant = restaurant;
 	}
 
+	public void showAlert(String text) {
+		alertDialog.getDialogPane().setHeaderText(text);
+		alertDialog.showAndWait();
+	}
+	
 	public void loadScreen(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
@@ -538,6 +556,10 @@ public class RestaurantGUI {
 		String password = txtLoginPassword.getText();
 		if(restaurant.logIn(username, password)) {
 			loadScreen("table-view.fxml");
+		}else if(username.isEmpty() || password.isEmpty()){
+			showAlert("Por favor ingresa un usuario y una contraseña.");
+		}else {
+			showAlert("El usuario no existe o la contraseña es incorrecta.");
 		}
 	}
 
@@ -557,11 +579,20 @@ public class RestaurantGUI {
 			int ID = Integer.parseInt(txtRegisterID.getText());
 			String username = txtRegisterUsername.getText();
 			String password = txtRegisterPassword.getText();
+			boolean created;
 			if(wroteName && wroteSurname && wroteID && wroteUsername && wrotePassword) {
-				restaurant.addUser(name, surname, ID, username, password);
+				created = restaurant.addUser(name, surname, ID, username, password);
+				if(created) {
+					showAlert("Cuenta creada.");
+				}else {
+					showAlert("El usuario ya existe.");
+				}
+				
+			}else {
+				showAlert("Rellena todos los campos del formulario.");
 			}
 		} catch(NumberFormatException nfe) {
-			System.out.println("nfe");
+			showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 		}
 	}
 
@@ -626,7 +657,7 @@ public class RestaurantGUI {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
 		dialog = new Dialog<String>();
-		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType, deleteButtonType);
+		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType, deleteButtonType, disableButtonType, enableButtonType);
 		Parent root;
 		try {
 			root = fxmlLoader.load();
@@ -641,12 +672,16 @@ public class RestaurantGUI {
 	public void addProducts() {
 		openWindow("add-product.fxml");
 		for(ProductType i: restaurant.getProductTypes()) {
-			cbProductType.getItems().add(i.getName());
+			if(!i.isDisabled()) {
+				cbProductType.getItems().add(i.getName());
+			}
 		}
 		for(Ingredient i: restaurant.getIngredients()) {
-			CheckBox newCheckBox = new CheckBox();
-			newCheckBox.setText(i.getName());
-			vbProductIngredients.getChildren().add(newCheckBox);
+			if(!i.isDisabled()) {
+				CheckBox newCheckBox = new CheckBox();
+				newCheckBox.setText(i.getName());
+				vbProductIngredients.getChildren().add(newCheckBox);
+			}
 		}
 		cbProductSize.getItems().addAll("Caja personal", "Caja para dos");
 		dialog.setResultConverter(dialogButton -> {
@@ -678,14 +713,21 @@ public class RestaurantGUI {
 						break;
 					}
 					int productPrice = Integer.parseInt(txtProductPrice.getText());
+					boolean created;
 					if(!productName.isEmpty()) {
-						restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
-						viewProducts();
+						created = restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
+						if(created) {
+							viewProducts();
+						}else {
+							showAlert("El producto ya existe.");
+						}
+					}else {
+						showAlert("Asegúrate de llenar todos los campos.");
 					}
 				}catch(NullPointerException npe) {
-					System.out.println("npe");
+					showAlert("Asegúrate de seleccionar un tipo de producto y un tamaño (NullPointerException).");
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
 			}
 			return null;
@@ -698,9 +740,16 @@ public class RestaurantGUI {
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
 				String productTypeName = txtProductTypeName.getText();
+				boolean created;
 				if(!productTypeName.isEmpty()) {
-					restaurant.addProductType(productTypeName, restaurant.getActualUser());
-					viewProductTypes();
+					created = restaurant.addProductType(productTypeName, restaurant.getActualUser());
+					if(created) {
+						viewProductTypes();
+					}else {
+						showAlert("El tipo de producto ya existe.");
+					}
+				}else {
+					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}
 			return null;
@@ -713,9 +762,16 @@ public class RestaurantGUI {
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
 				String ingredientName = txtIngredientName.getText();
+				boolean created;
 				if(!ingredientName.isEmpty()) {
-					restaurant.addIngredient(ingredientName, restaurant.getActualUser());
-					viewIngredients();
+					created = restaurant.addIngredient(ingredientName, restaurant.getActualUser());
+					if(created) {
+						viewIngredients();
+					}else {
+						showAlert("El ingrediente ya existe.");
+					}
+				}else {
+					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}
 			return null;
@@ -739,7 +795,7 @@ public class RestaurantGUI {
 						viewClients();
 					}
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
 			}
 			return null;
@@ -760,7 +816,7 @@ public class RestaurantGUI {
 						viewEmployees();
 					}
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
 			}
 			return null;
@@ -771,27 +827,33 @@ public class RestaurantGUI {
 	public void addOrders() {
 		openWindow("add-order.fxml");
 		for(Product i: restaurant.getProducts()) {
-			HBox newHBox = new HBox();
-			Label newLabel = new Label();
-			newLabel.setText(i.getName());
-			TextField newTextField = new TextField();
-			newTextField.setText("0");
-			newHBox.getChildren().addAll(newLabel, newTextField);
-			vbOrderProducts.getChildren().add(newHBox);
+			if(!i.isDisabled()) {
+				HBox newHBox = new HBox();
+				Label newLabel = new Label();
+				newLabel.setText(i.getName());
+				TextField newTextField = new TextField();
+				newTextField.setText("0");
+				newHBox.getChildren().addAll(newLabel, newTextField);
+				vbOrderProducts.getChildren().add(newHBox);
+			}
 		}
 		ToggleGroup clientToggleGroup = new ToggleGroup();
 		for(Client i: restaurant.getClients()) {
-			RadioButton newRadioButton = new RadioButton();
-			newRadioButton.setText(i.getName());
-			clientToggleGroup.getToggles().add(newRadioButton);
-			vbOrderClients.getChildren().add(newRadioButton);
+			if(!i.isDisabled()) {
+				RadioButton newRadioButton = new RadioButton();
+				newRadioButton.setText(i.getName());
+				clientToggleGroup.getToggles().add(newRadioButton);
+				vbOrderClients.getChildren().add(newRadioButton);
+			}
 		}
 		ToggleGroup employeeToggleGroup = new ToggleGroup();
 		for(Employee i: restaurant.getEmployees()) {
-			RadioButton newRadioButton = new RadioButton();
-			newRadioButton.setText(i.getName());
-			employeeToggleGroup.getToggles().add(newRadioButton);
-			vbOrderEmployee.getChildren().add(newRadioButton);
+			if(!i.isDisabled()) {
+				RadioButton newRadioButton = new RadioButton();
+				newRadioButton.setText(i.getName());
+				employeeToggleGroup.getToggles().add(newRadioButton);
+				vbOrderEmployee.getChildren().add(newRadioButton);
+			}
 		}
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
@@ -896,12 +958,21 @@ public class RestaurantGUI {
 					if(!productName.isEmpty()) {
 						restaurant.updateProduct(product, productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
 						viewProducts();
+					}else {
+						showAlert("Asegúrate de llenar todos los campos.");
 					}
 				}catch(NullPointerException npe) {
-					System.out.println("npe");
+					showAlert("Asegúrate de seleccionar un tipo de producto y un tamaño (NullPointerException).");
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
+			}else if(dialogButton == deleteButtonType) {
+				restaurant.deleteProduct(product);
+				viewProducts();
+			}else if(dialogButton == disableButtonType) {
+				product.setDisabled(true);
+			}else if(dialogButton == enableButtonType) {
+				product.setDisabled(false);
 			}
 			return null;
 		});
@@ -920,9 +991,16 @@ public class RestaurantGUI {
 				if(!productTypeName.isEmpty()) {
 					restaurant.updateProductType(productType, productTypeName, restaurant.getActualUser());
 					viewProductTypes();
+				}else {
+					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}else if(dialogButton == deleteButtonType) {
-				
+				restaurant.deleteProductType(productType);
+				viewProductTypes();
+			}else if(dialogButton == disableButtonType) {
+				productType.setDisabled(true);
+			}else if(dialogButton == enableButtonType) {
+				productType.setDisabled(false);
 			}
 			return null;
 		});
@@ -941,9 +1019,16 @@ public class RestaurantGUI {
 				if(!ingredientName.isEmpty()) {
 					restaurant.updateIngredient(ingredient, ingredientName, restaurant.getActualUser());
 					viewIngredients();
+				}else {
+					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}else if(dialogButton == deleteButtonType) {
-				
+				restaurant.deleteIngredient(ingredient);
+				viewIngredients();
+			}else if(dialogButton == disableButtonType) {
+				ingredient.setDisabled(true);
+			}else if(dialogButton == enableButtonType) {
+				ingredient.setDisabled(false);
 			}
 			return null;
 		});
@@ -973,10 +1058,19 @@ public class RestaurantGUI {
 					if(!clientName.isEmpty() && !clientSurname.isEmpty() && !clientAddress.isEmpty()) {
 						restaurant.updateClient(client, clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
 						viewClients();
+					}else {
+						showAlert("Asegúrate de llenar todos los campos.");
 					}
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
+			}else if(dialogButton == deleteButtonType) {
+				restaurant.deleteClient(client);
+				viewClients();
+			}else if(dialogButton == disableButtonType) {
+				client.setDisabled(true);
+			}else if(dialogButton == enableButtonType) {
+				client.setDisabled(false);
 			}
 			return null;
 		});
@@ -1000,10 +1094,18 @@ public class RestaurantGUI {
 					if(!employeeName.isEmpty() && !employeeSurname.isEmpty()) {
 						restaurant.updateEmployee(employee, employeeName, employeeSurname, employeeID);
 						viewEmployees();
+					}else {
+						showAlert("Asegúrate de llenar todos los campos.");
 					}
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
+			}else if(dialogButton == deleteButtonType) {
+				restaurant.deleteEmployee(employee);
+			}else if(dialogButton == disableButtonType) {
+				employee.setDisabled(true);
+			}else if(dialogButton == enableButtonType) {
+				employee.setDisabled(false);
 			}
 			return null;
 		});
@@ -1030,11 +1132,16 @@ public class RestaurantGUI {
 					if(!userName.isEmpty() && !userSurname.isEmpty() && !userUsername.isEmpty() && !userPassword.isEmpty()) {
 						restaurant.updateUser(restaurant.getActualUser(), userName, userSurname, userID, userUsername, userPassword);
 						viewUsers();
+					}else {
+						showAlert("Asegúrate de llenar todos los campos.");
 					}
 				}catch(NumberFormatException nfe) {
-					System.out.println("nfe");
+					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
 				}
 
+			}else if(dialogButton == deleteButtonType) {
+				restaurant.deleteUser(restaurant.getActualUser());
+				logOut();
 			}
 			return null;
 		});
@@ -1124,7 +1231,12 @@ public class RestaurantGUI {
 				if(!orderProducts.isEmpty() && client != null && employee != null) {
 					restaurant.updateOrder(order, orderCode, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
 					viewOrders();
+				}else {
+					showAlert("Asegúrate de llenar todos los campos.");
 				}
+			}else if(dialogButton == deleteButtonType) {
+				restaurant.deleteOrder(order);
+				viewOrders();
 			}
 			return null;
 		});
@@ -1134,8 +1246,9 @@ public class RestaurantGUI {
 	public void changeOrderStatus() {
 		restaurant.updateOrderState(restaurant.getActualOrder());
 		viewOrders();
+		showAlert("Cambiado a " + restaurant.getActualOrder().getOrderStateAsString());
 	}
-	
+
 	public void importProducts() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Products Data");
@@ -1299,6 +1412,22 @@ public class RestaurantGUI {
 
 	public void setDeleteButtonType(ButtonType deleteButtonType) {
 		this.deleteButtonType = deleteButtonType;
+	}
+
+	public ButtonType getDisableButtonType() {
+		return disableButtonType;
+	}
+
+	public void setDisableButtonType(ButtonType disableButtonType) {
+		this.disableButtonType = disableButtonType;
+	}
+
+	public ButtonType getEnableButtonType() {
+		return enableButtonType;
+	}
+
+	public void setEnableButtonType(ButtonType enableButtonType) {
+		this.enableButtonType = enableButtonType;
 	}
 
 }
