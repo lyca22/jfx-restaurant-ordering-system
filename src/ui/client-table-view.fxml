@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<TableView fx:id="tvClients" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-  <columns>
-    <TableColumn fx:id="tcClientName" prefWidth="190.0" text="Nombre" />
-    <TableColumn fx:id="tcClientSurnames" minWidth="0.0" prefWidth="190.0" text="Apellidos" />
-      <TableColumn fx:id="tcClientID" prefWidth="180.0" text="ID" />
-      <TableColumn fx:id="tcClientAddress" prefWidth="190.0" text="Dirección" />
-      <TableColumn fx:id="tcClientPhone" prefWidth="180.0" text="Teléfono" />
-      <TableColumn fx:id="tcClientObservations" prefWidth="250.0" text="Observaciones" />
-  </columns>
-</TableView>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="tvClients" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1270.0">
+         <columns>
+            <TableColumn fx:id="tcClientName" prefWidth="190.0" text="Nombre" />
+            <TableColumn fx:id="tcClientSurnames" minWidth="0.0" prefWidth="190.0" text="Apellidos" />
+            <TableColumn fx:id="tcClientID" prefWidth="180.0" text="ID" />
+            <TableColumn fx:id="tcClientAddress" prefWidth="190.0" text="Dirección" />
+            <TableColumn fx:id="tcClientPhone" prefWidth="180.0" text="Teléfono" />
+            <TableColumn fx:id="tcClientObservations" prefWidth="250.0" text="Observaciones" />
+         </columns>
+      </TableView>
+      <HBox prefHeight="100.0" prefWidth="1270.0">
+         <children>
+            <Label text="Nombre:">
+               <HBox.margin>
+                  <Insets left="200.0" />
+               </HBox.margin>
+            </Label>
+            <TextField>
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+   </children>
+</VBox>
