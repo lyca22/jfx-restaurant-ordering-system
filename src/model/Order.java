@@ -1,11 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-public class Order implements Comparable<Order>{
+public class Order implements Comparable<Order>, Serializable{
 
+	private static final long serialVersionUID = 1;
+	
 	private int orderCode;
 	private OrderState orderState;
 	private List<Product> products;

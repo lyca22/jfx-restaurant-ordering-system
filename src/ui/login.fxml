@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -12,7 +13,13 @@
 
 <VBox alignment="CENTER" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #F9E79F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="54.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="162.0" fitWidth="246.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../data/imagenCasaD(CUnet)(noise_scale)(Level1)(tta)(x2.000000).png" />
+         </image>
+         <VBox.margin>
+            <Insets bottom="35.0" />
+         </VBox.margin></ImageView>
       <Label alignment="CENTER" text="LA CASA DORADA" textFill="#b4823c">
          <font>
             <Font name="Berlin Sans FB" size="44.0" />
@@ -82,7 +89,7 @@
             </Button>
          </children>
          <VBox.margin>
-            <Insets top="20.0" />
+            <Insets bottom="100.0" top="20.0" />
          </VBox.margin>
       </HBox>
    </children>

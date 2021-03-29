@@ -275,7 +275,7 @@ public class Restaurant {
 
 	//Add methods.
 
-	public boolean addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) {
+	public boolean addProduct(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) throws FileNotFoundException, IOException {
 		boolean created = false;
 		if(searchProduct(name) == null) {
 			Product product = new Product(name, productType, ingredients, productSize, price, user);
@@ -286,7 +286,13 @@ public class Restaurant {
 		return created;
 	}
 
-	public boolean addProductType(String name, User user) {
+	public boolean addProductAndSave(String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User user) throws FileNotFoundException, IOException {
+		boolean created = addProduct(name, productType, ingredients, productSize, price, user);
+		saveAll();
+		return created;
+	}
+
+	public boolean addProductType(String name, User user) throws FileNotFoundException, IOException {
 		boolean created = false;
 		if(searchProductType(name) == null) {
 			ProductType productType = new ProductType(name, user);
@@ -297,7 +303,13 @@ public class Restaurant {
 		return created;
 	}
 
-	public boolean addIngredient(String name, User user) {
+	public boolean addProductTypeAndSave(String name, User user) throws FileNotFoundException, IOException {
+		boolean created = addProductType(name, user);
+		saveAll();
+		return created;
+	}
+
+	public boolean addIngredient(String name, User user) throws FileNotFoundException, IOException {
 		boolean created = false;
 		if(searchIngredient(name) == null) {
 			Ingredient ingredient = new Ingredient(name, user);
@@ -308,21 +320,39 @@ public class Restaurant {
 		return created;
 	}
 
-	public Client addClient(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) {
+	public boolean addIngredientAndSave(String name, User user) throws FileNotFoundException, IOException {
+		boolean created = addIngredient(name, user);
+		saveAll();
+		return created;
+	}
+
+	public Client addClient(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) throws FileNotFoundException, IOException {
 		Client client = new Client(name, surname, ID, address, clientPhone, observations, user);
 		clients.add(client);
 		sortClientBySurnameAndName();
 		return client;
 	}
 
-	public Employee addEmployee(String name, String surname, int ID) {
+	public Client addClientAndSave(String name, String surname, int ID, String address, BigInteger clientPhone, String observations, User user) throws FileNotFoundException, IOException {
+		Client client = addClient(name, surname, ID, address, clientPhone, observations, user);
+		saveAll();
+		return client;
+	}
+	
+	public Employee addEmployee(String name, String surname, int ID) throws FileNotFoundException, IOException {
 		Employee employee = new Employee(name, surname, ID);
 		employees.add(employee);
 		sortEmployeeBySurnameAndName();
 		return employee;
 	}
 
-	public boolean addUser(String name, String surname, int iD, String username, String password) {
+	public Employee addEmployeeAndSave(String name, String surname, int ID) throws FileNotFoundException, IOException {
+		Employee employee = addEmployee(name, surname, ID);
+		saveAll();
+		return employee;
+	}
+	
+	public boolean addUser(String name, String surname, int iD, String username, String password) throws FileNotFoundException, IOException {
 		boolean created = false;
 		User user = searchUser(username);
 		if(users.size() == 0 || user == null) {
@@ -336,26 +366,42 @@ public class Restaurant {
 		return created;
 	}
 
+	public boolean addUserAndSave(String name, String surname, int iD, String username, String password) throws FileNotFoundException, IOException {
+		boolean created = addUser(name, surname, iD, username, password);
+		saveAll();
+		return created;
+	}
+	
 	public int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
 	}
 
-	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
+	public void addOrder(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) throws FileNotFoundException, IOException {
 		int orderCode = getRandomNumber(0, Integer.MAX_VALUE);
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
 	}
 
-	public void addOrder(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) {
+	public void addOrderAndSave(OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) throws FileNotFoundException, IOException {
+		addOrder(orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
+		saveAll();
+	}
+	
+	public void addOrder(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) throws FileNotFoundException, IOException {
 		Order order = new Order(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
 		orders.add(order);
 		Collections.sort(orders);
 	}
+	
+	public void addOrderAndSave(int orderCode, OrderState orderstate, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User user) throws FileNotFoundException, IOException {
+		addOrder(orderCode, orderstate, products, quantity, client, employeeWhoDelivered, date, observations, user);
+		saveAll();
+	}
 
 	//Delete methods.
 
-	public void deleteProduct(Product product) {
+	public void deleteProduct(Product product) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
 			if(orders.get(i).getProducts().contains(product)) {
@@ -364,10 +410,11 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			products.remove(product);
+			saveAll();
 		}
 	}
 
-	public void deleteProductType(ProductType productType) {
+	public void deleteProductType(ProductType productType) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < products.size(); i++) {
 			if(products.get(i).getProductType() == productType) {
@@ -376,10 +423,11 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			productTypes.remove(productType);
+			saveAll();
 		}
 	}
 
-	public void deleteIngredient(Ingredient ingredient) {
+	public void deleteIngredient(Ingredient ingredient) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < products.size(); i++) {
 			if(products.get(i).getIngredients().contains(ingredient)) {
@@ -388,10 +436,11 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			ingredients.remove(ingredient);
+			saveAll();
 		}
 	}
 
-	public void deleteClient(Client client) {
+	public void deleteClient(Client client) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
 			if(orders.get(i).getClient() == client) {
@@ -400,10 +449,11 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			clients.remove(client);
+			saveAll();
 		}
 	}
 
-	public void deleteEmployee(Employee employee) {
+	public void deleteEmployee(Employee employee) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
 			if(orders.get(i).getEmployeeWhoDelivered() == employee) {
@@ -412,13 +462,14 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			employees.remove(employee);
+			saveAll();
 		}
 		if(employee instanceof User) {
 			deleteUser((User)employee);
 		}
 	}
 
-	public void deleteUser(User user) {
+	public void deleteUser(User user) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i < orders.size(); i++) {
 			if(orders.get(i).getUserWhoCreated() == user || orders.get(i).getLastUserWhoModified() == user) {
@@ -447,16 +498,18 @@ public class Restaurant {
 		}
 		if(canDelete) {
 			users.remove(user);
+			saveAll();
 		}
 	}
 
-	public void deleteOrder(Order order) {
+	public void deleteOrder(Order order) throws FileNotFoundException, IOException {
 		orders.remove(order);
+		saveAll();
 	}
 
 	//Update methods.
 
-	public void updateProduct(Product product, String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User lastUserWhoModified) {
+	public void updateProduct(Product product, String name, ProductType productType, List<Ingredient> ingredients, ProductSize productSize, int price, User lastUserWhoModified) throws FileNotFoundException, IOException {
 		product.setName(name);
 		product.setProductType(productType);
 		product.setIngredients(ingredients);
@@ -464,21 +517,24 @@ public class Restaurant {
 		product.setPrice(price);
 		product.setLastUserWhoModified(lastUserWhoModified);
 		sortProductByInsertion(products);
+		saveAll();
 	}
 
-	public void updateProductType(ProductType productType, String name, User lastUserWhoModified) {
+	public void updateProductType(ProductType productType, String name, User lastUserWhoModified) throws FileNotFoundException, IOException {
 		productType.setName(name);
 		productType.setLastUserWhoModified(lastUserWhoModified);
 		Collections.sort(productTypes);
+		saveAll();
 	}
 
-	public void updateIngredient(Ingredient ingredient, String name, User lastUserWhoModified) {
+	public void updateIngredient(Ingredient ingredient, String name, User lastUserWhoModified) throws FileNotFoundException, IOException {
 		ingredient.setName(name);
 		ingredient.setLastUserWhoModified(lastUserWhoModified);
 		sortIngredientBySelection(ingredients);
+		saveAll();
 	}
 
-	public void updateClient(Client client, String name, String surname, int ID, String address, BigInteger phoneNumber, String observations, User lastUserWhoModified) {
+	public void updateClient(Client client, String name, String surname, int ID, String address, BigInteger phoneNumber, String observations, User lastUserWhoModified) throws FileNotFoundException, IOException {
 		client.setName(name);
 		client.setSurname(surname);
 		client.setID(ID);
@@ -487,24 +543,27 @@ public class Restaurant {
 		client.setObservations(observations);
 		client.setLastUserWhoModified(lastUserWhoModified);
 		sortClientBySurnameAndName();
+		saveAll();
 	}
 
-	public void updateEmployee(Employee employee, String name, String surname, int ID) {
+	public void updateEmployee(Employee employee, String name, String surname, int ID) throws FileNotFoundException, IOException {
 		employee.setName(name);
 		employee.setSurname(surname);
 		employee.setID(ID);
 		sortEmployeeBySurnameAndName();
+		saveAll();
 	}
 
-	public void updateUser(User user, String name, String surname, int iD, String username, String password) {
+	public void updateUser(User user, String name, String surname, int iD, String username, String password) throws FileNotFoundException, IOException {
 		updateEmployee(user, name, surname, iD);
 		user.setUsername(username);
 		user.setPassword(password);
 		sortUserByUsername();
 		sortEmployeeBySurnameAndName();
+		saveAll();
 	}
 
-	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User lastUserWhoModified) {
+	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User lastUserWhoModified) throws FileNotFoundException, IOException {
 		order.setOrderCode(orderCode);
 		order.setProducts(products);
 		order.setQuantity(quantity);
@@ -514,9 +573,10 @@ public class Restaurant {
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
 		Collections.sort(orders);
+		saveAll();
 	}
 
-	public void updateOrderState(Order order) {
+	public void updateOrderState(Order order) throws FileNotFoundException, IOException {
 		OrderState status = order.getOrderState();
 		switch(status) {
 		case Requested:
@@ -533,32 +593,39 @@ public class Restaurant {
 			break;
 		}
 		order.setOrderState(status);
+		saveAll();
 	}
 
 	//Disable methods.
 
-	public void disableProduct(Product product, boolean option) {
+	public void disableProduct(Product product, boolean option) throws FileNotFoundException, IOException {
 		product.setDisabled(option);
+		saveAll();
 	}
 
-	public void disableProductType(ProductType productType, boolean option) {
+	public void disableProductType(ProductType productType, boolean option) throws FileNotFoundException, IOException {
 		productType.setDisabled(option);
+		saveAll();
 	}
 
-	public void disableIngredient(Ingredient ingredient, boolean option) {
+	public void disableIngredient(Ingredient ingredient, boolean option) throws FileNotFoundException, IOException {
 		ingredient.setDisabled(option);
+		saveAll();
 	}
 
-	public void disableClient(Client client, boolean option) {
+	public void disableClient(Client client, boolean option) throws FileNotFoundException, IOException {
 		client.setDisabled(option);
+		saveAll();
 	}
 
-	public void disableEmployee(Employee employee, boolean option) {
+	public void disableEmployee(Employee employee, boolean option) throws FileNotFoundException, IOException {
 		employee.setDisabled(option);
+		saveAll();
 	}
 
-	public void disableUser(User user, boolean option) {
+	public void disableUser(User user, boolean option) throws FileNotFoundException, IOException {
 		user.setDisabled(option);
+		saveAll();
 	}
 
 	//Report generating methods.
@@ -647,7 +714,6 @@ public class Restaurant {
 				}
 
 			}
-
 		}
 
 		for (int i = 0; i < products.size(); i++) {
@@ -673,6 +739,7 @@ public class Restaurant {
 			addClient(name, surname, ID, address, phoneNumber, observations, user);
 			line = br.readLine();
 		}
+		saveAll();
 		br.close();
 	}
 
@@ -682,7 +749,8 @@ public class Restaurant {
 		while(line != null) {
 			String[] productsData = line.split(separator);
 			String name = productsData[0];
-			ProductType productType = new ProductType(productsData[1], user);
+			addProductType(productsData[1], user);
+			ProductType productType = searchProductType(productsData[1]);
 			String[] ingredientList = productsData[2].split(",");
 			for (int i = 0; i < ingredientList.length; i++) {
 				addIngredient(ingredientList[i], user);
@@ -701,6 +769,7 @@ public class Restaurant {
 			addProduct(name, productType, ingredients, productSize, price, user);
 			line = br.readLine();
 		}
+		saveAll();
 		br.close();
 	}
 
@@ -730,11 +799,13 @@ public class Restaurant {
 			String[] productsList = ordersData[2].split(" ");
 			List<Integer> quantity = new ArrayList<Integer>();
 			String[] quantityList = ordersData[3].split(" ");
+			boolean added = false;
 			for (int i = 0; i < productsList.length; i++) {
 				Product productFound = searchProduct(productsList[i]);
 				if (productFound != null) {
 					products.add(productFound);
 					quantity.add(Integer.parseInt(quantityList[i]));
+					added = true;
 				}
 			}
 			String[] clientNameAndSurname = ordersData[4].split(" ");
@@ -751,9 +822,12 @@ public class Restaurant {
 			String[] timeInfo = dayAndTimeInfo[1].split(":");
 			LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateInfo[0]), Integer.parseInt(dateInfo[1]), Integer.parseInt(dayAndTimeInfo[0]), Integer.parseInt(timeInfo[0]), Integer.parseInt(timeInfo[1]), Integer.parseInt(timeInfo[2]));
 			String observations = ordersData[12];
-			addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, user);
+			if(added) {
+				addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, user);
+			}
 			line = br.readLine();
 		}
+		saveAll();
 		br.close();
 	}
 
@@ -767,49 +841,49 @@ public class Restaurant {
 
 	public void saveAddress() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ADDRESS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(address);
 		oos.close();
 	}
 
 	public void saveProducts() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PRODUCTS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(products);
 		oos.close();
 	}
 
 	public void saveProductTypes() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PRODUCT_TYPES_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(productTypes);
 		oos.close();
 	}
 
 	public void saveIngredients() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(INGREDIENTS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(ingredients);
 		oos.close();
 	}
 
 	public void saveClients() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CLIENTS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(clients);
 		oos.close();
 	}
 
 	public void saveEmployees() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(EMPLOYEES_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(employees);
 		oos.close();
 	}
 
 	public void saveUsers() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(users);
 		oos.close();
 	}
 
 	public void saveOrders() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ORDERS_FILE_NAME));
-		oos.writeObject(name);
+		oos.writeObject(orders);
 		oos.close();
 	}
 
@@ -946,6 +1020,26 @@ public class Restaurant {
 
 	public void setActualOrder(Order actualOrder) {
 		this.actualOrder = actualOrder;
+	}
+
+	public void loadAll() throws NullPointerException, ClassNotFoundException, FileNotFoundException, IOException {
+		loadProducts();
+		loadProductTypes();
+		loadIngredients();
+		loadClients();
+		loadEmployees();
+		loadUsers();
+		loadOrders();
+	}
+
+	public void saveAll() throws FileNotFoundException, IOException {
+		saveProducts();
+		saveProductTypes();
+		saveIngredients();
+		saveClients();
+		saveEmployees();
+		saveUsers();
+		saveOrders();
 	}
 
 }

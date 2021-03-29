@@ -27,7 +27,7 @@ public class Main extends Application {
 		primaryStage.setTitle("La Casa Dorada");
 		primaryStage.show();
 		restaurantGUI.loadScreen("login.fxml");
-		
+		restaurant.loadAll();
 	}
 
 	public static void main(String[] args) {

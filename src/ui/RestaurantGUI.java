@@ -457,7 +457,7 @@ public class RestaurantGUI {
 		tcProductSize.setCellValueFactory(new PropertyValueFactory<model.Product, String>("sizeAsString"));
 		tcProductPrice.setCellValueFactory(new PropertyValueFactory<model.Product, String>("price"));
 
-		tcProductName.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcProductName.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));	
 		tcProductType.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcProductIngredients.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcProductSize.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
@@ -581,7 +581,7 @@ public class RestaurantGUI {
 			String password = txtRegisterPassword.getText();
 			boolean created;
 			if(wroteName && wroteSurname && wroteID && wroteUsername && wrotePassword) {
-				created = restaurant.addUser(name, surname, ID, username, password);
+				created = restaurant.addUserAndSave(name, surname, ID, username, password);
 				if(created) {
 					showAlert("Cuenta creada.");
 				}else {
@@ -593,6 +593,12 @@ public class RestaurantGUI {
 			}
 		} catch(NumberFormatException nfe) {
 			showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
 		}
 	}
 
@@ -715,7 +721,7 @@ public class RestaurantGUI {
 					int productPrice = Integer.parseInt(txtProductPrice.getText());
 					boolean created;
 					if(!productName.isEmpty()) {
-						created = restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
+						created = restaurant.addProductAndSave(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
 						if(created) {
 							viewProducts();
 						}else {
@@ -728,6 +734,12 @@ public class RestaurantGUI {
 					showAlert("Asegúrate de seleccionar un tipo de producto y un tamaño (NullPointerException).");
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}
 			return null;
@@ -742,11 +754,19 @@ public class RestaurantGUI {
 				String productTypeName = txtProductTypeName.getText();
 				boolean created;
 				if(!productTypeName.isEmpty()) {
-					created = restaurant.addProductType(productTypeName, restaurant.getActualUser());
-					if(created) {
-						viewProductTypes();
-					}else {
-						showAlert("El tipo de producto ya existe.");
+					try {
+						created = restaurant.addProductTypeAndSave(productTypeName, restaurant.getActualUser());
+						if(created) {
+							viewProductTypes();
+						}else {
+							showAlert("El tipo de producto ya existe.");
+						}
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
 					}
 				}else {
 					showAlert("Asegúrate de llenar todos los campos.");
@@ -764,11 +784,19 @@ public class RestaurantGUI {
 				String ingredientName = txtIngredientName.getText();
 				boolean created;
 				if(!ingredientName.isEmpty()) {
-					created = restaurant.addIngredient(ingredientName, restaurant.getActualUser());
-					if(created) {
-						viewIngredients();
-					}else {
-						showAlert("El ingrediente ya existe.");
+					try {
+						created = restaurant.addIngredientAndSave(ingredientName, restaurant.getActualUser());
+						if(created) {
+							viewIngredients();
+						}else {
+							showAlert("El ingrediente ya existe.");
+						}
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
 					}
 				}else {
 					showAlert("Asegúrate de llenar todos los campos.");
@@ -791,11 +819,17 @@ public class RestaurantGUI {
 					BigInteger clientPhone = new BigInteger(txtClientPhone.getText());
 					String clientObservations = txtClientObservations.getText();
 					if(!clientName.isEmpty() && !clientSurname.isEmpty() && !clientAddress.isEmpty()) {
-						restaurant.addClient(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
+						restaurant.addClientAndSave(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
 						viewClients();
 					}
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}
 			return null;
@@ -812,11 +846,17 @@ public class RestaurantGUI {
 					String employeeSurname = txtEmployeeSurname.getText();
 					int employeeID = Integer.parseInt(txtEmployeeID.getText());
 					if(!employeeName.isEmpty() && !employeeSurname.isEmpty()) {
-						restaurant.addEmployee(employeeName, employeeSurname, employeeID);
+						restaurant.addEmployeeAndSave(employeeName, employeeSurname, employeeID);
 						viewEmployees();
 					}
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}
 			return null;
@@ -899,7 +939,15 @@ public class RestaurantGUI {
 				LocalDateTime date = LocalDateTime.now();
 				String observations = txtOrderObservations.getText();
 				if(!orderProducts.isEmpty() && client != null && employee != null) {
-					restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					try {
+						restaurant.addOrderAndSave(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					viewOrders();
 				}
 			}
@@ -965,9 +1013,23 @@ public class RestaurantGUI {
 					showAlert("Asegúrate de seleccionar un tipo de producto y un tamaño (NullPointerException).");
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteProduct(product);
+				try {
+					restaurant.deleteProduct(product);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				viewProducts();
 			}else if(dialogButton == disableButtonType) {
 				product.setDisabled(true);
@@ -989,13 +1051,29 @@ public class RestaurantGUI {
 			if (dialogButton == acceptButtonType) {
 				String productTypeName = txtProductTypeName.getText();
 				if(!productTypeName.isEmpty()) {
-					restaurant.updateProductType(productType, productTypeName, restaurant.getActualUser());
+					try {
+						restaurant.updateProductType(productType, productTypeName, restaurant.getActualUser());
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					viewProductTypes();
 				}else {
 					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteProductType(productType);
+				try {
+					restaurant.deleteProductType(productType);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				viewProductTypes();
 			}else if(dialogButton == disableButtonType) {
 				productType.setDisabled(true);
@@ -1017,13 +1095,29 @@ public class RestaurantGUI {
 			if (dialogButton == acceptButtonType) {
 				String ingredientName = txtIngredientName.getText();
 				if(!ingredientName.isEmpty()) {
-					restaurant.updateIngredient(ingredient, ingredientName, restaurant.getActualUser());
+					try {
+						restaurant.updateIngredient(ingredient, ingredientName, restaurant.getActualUser());
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					viewIngredients();
 				}else {
 					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteIngredient(ingredient);
+				try {
+					restaurant.deleteIngredient(ingredient);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				viewIngredients();
 			}else if(dialogButton == disableButtonType) {
 				ingredient.setDisabled(true);
@@ -1063,9 +1157,23 @@ public class RestaurantGUI {
 					}
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteClient(client);
+				try {
+					restaurant.deleteClient(client);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				viewClients();
 			}else if(dialogButton == disableButtonType) {
 				client.setDisabled(true);
@@ -1099,9 +1207,23 @@ public class RestaurantGUI {
 					}
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteEmployee(employee);
+				try {
+					restaurant.deleteEmployee(employee);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 			}else if(dialogButton == disableButtonType) {
 				employee.setDisabled(true);
 			}else if(dialogButton == enableButtonType) {
@@ -1137,10 +1259,24 @@ public class RestaurantGUI {
 					}
 				}catch(NumberFormatException nfe) {
 					showAlert("Asegúrate de rellenar los campos con la información correcta (NumberFormatException).");
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
 				}
 
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteUser(restaurant.getActualUser());
+				try {
+					restaurant.deleteUser(restaurant.getActualUser());
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				logOut();
 			}
 			return null;
@@ -1229,13 +1365,29 @@ public class RestaurantGUI {
 				LocalDateTime date = LocalDateTime.of(Integer.parseInt(orderDate[0]), Integer.parseInt(orderDate[1]), Integer.parseInt(orderDate[2]), Integer.parseInt(hour[0]), Integer.parseInt(hour[1]), Integer.parseInt(hour[2]));
 				String observations = txtOrderObservations.getText();
 				if(!orderProducts.isEmpty() && client != null && employee != null) {
-					restaurant.updateOrder(order, orderCode, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					try {
+						restaurant.updateOrder(order, orderCode, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					} catch (FileNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					viewOrders();
 				}else {
 					showAlert("Asegúrate de llenar todos los campos.");
 				}
 			}else if(dialogButton == deleteButtonType) {
-				restaurant.deleteOrder(order);
+				try {
+					restaurant.deleteOrder(order);
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 				viewOrders();
 			}
 			return null;
@@ -1244,7 +1396,15 @@ public class RestaurantGUI {
 	}
 
 	public void changeOrderStatus() {
-		restaurant.updateOrderState(restaurant.getActualOrder());
+		try {
+			restaurant.updateOrderState(restaurant.getActualOrder());
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		viewOrders();
 		showAlert("Cambiado a " + restaurant.getActualOrder().getOrderStateAsString());
 	}
@@ -1254,15 +1414,18 @@ public class RestaurantGUI {
 		fileChooser.setTitle("Import Products Data");
 		File file = fileChooser.showOpenDialog(null);
 		String separator = ";";
-		try {
-			restaurant.importProductData(file.getAbsolutePath(), separator, restaurant.getActualUser());
-			initializeProductsTableView();
-		} catch (IOException e) {
-			System.out.println("IOException found");
-		} catch (NullPointerException npe) {
-			System.out.println("NP Exception found");
-		} catch (NumberFormatException nfe) {
-			System.out.println("NF Exception found");
+		viewProducts();
+		if(file != null) {
+			try {
+				restaurant.importProductData(file.getAbsolutePath(), separator, restaurant.getActualUser());
+				initializeProductsTableView();
+			} catch (IOException e) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NullPointerException npe) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NumberFormatException nfe) {
+				showAlert("El archivo no tiene el formato deseado.");
+			}
 		}
 	}
 
@@ -1271,15 +1434,18 @@ public class RestaurantGUI {
 		fileChooser.setTitle("Import Client Data");
 		File file = fileChooser.showOpenDialog(null);
 		String separator = ";";
-		try {
-			restaurant.importClientData(file.getAbsolutePath(), separator, restaurant.getActualUser());
-			initializeClientsTableView();
-		} catch (IOException e) {
-			System.out.println("IOException found");
-		} catch (NullPointerException npe) {
-			System.out.println("NP Exception found");
-		} catch (NumberFormatException nfe) {
-			System.out.println("NF Exception found");
+		viewClients();
+		if(file != null) {
+			try {
+				restaurant.importClientData(file.getAbsolutePath(), separator, restaurant.getActualUser());
+				initializeClientsTableView();
+			} catch (IOException e) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NullPointerException npe) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NumberFormatException nfe) {
+				showAlert("El archivo no tiene el formato deseado.");
+			}
 		}
 	}
 
@@ -1288,15 +1454,18 @@ public class RestaurantGUI {
 		fileChooser.setTitle("Import Order Data");
 		File file = fileChooser.showOpenDialog(null);
 		String separator = ";";
-		try {
-			restaurant.importOrderData(file.getAbsolutePath(), separator, restaurant.getActualUser());
-			initializeOrdersTableView();
-		} catch (IOException e) {
-			System.out.println("IOException found");
-		} catch (NullPointerException npe) {
-			System.out.println("NP Exception found");
-		} catch (NumberFormatException nfe) {
-			System.out.println("NF Exception found");
+		viewOrders();
+		if(file != null) {
+			try {
+				restaurant.importOrderData(file.getAbsolutePath(), separator, restaurant.getActualUser());
+				initializeOrdersTableView();
+			} catch (IOException e) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NullPointerException npe) {
+				showAlert("El archivo no se pudo encontrar o usted no tiene acceso a este.");
+			} catch (NumberFormatException nfe) {
+				showAlert("El archivo no tiene el formato deseado.");
+			}
 		}
 	}
 

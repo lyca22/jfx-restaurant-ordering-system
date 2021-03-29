@@ -1,8 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class Client {
+public class Client implements Serializable{
+	
+	private static final long serialVersionUID = 1;
 	
 	private String name;
 	private String surname;

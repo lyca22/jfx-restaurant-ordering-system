@@ -1,6 +1,10 @@
 package model;
 
-public class ProductType implements Comparable<ProductType>{
+import java.io.Serializable;
+
+public class ProductType implements Comparable<ProductType>, Serializable{
+	
+	private static final long serialVersionUID = 1;
 	
 	private String name;
 	private User userWhoCreated;
