@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -318,6 +319,9 @@ public class RestaurantGUI {
 	@FXML
 	private TextField orderHour;
 
+	@FXML
+	private TextField txtClientBrowser;
+	
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -392,7 +396,13 @@ public class RestaurantGUI {
 	private void initializeClientsTableView() {
 		ObservableList<model.Client> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getClients());
-		tvClients.setItems(observableList);
+		
+		FilteredList<Client> flClient = new FilteredList<Client>(observableList, p -> true);
+		tvClients.setItems(flClient);
+		txtClientBrowser.textProperty().addListener((obs, oldValue, newValue) -> {
+			flClient.setPredicate(p -> p.getName().toLowerCase().contains(newValue.toLowerCase().trim()));
+		});
+		
 		tcClientName.setCellValueFactory(new PropertyValueFactory<model.Client, String>("name"));
 		tcClientSurnames.setCellValueFactory(new PropertyValueFactory<model.Client, String>("surname"));
 		tcClientID.setCellValueFactory(new PropertyValueFactory<model.Client, String>("ID"));

@@ -8,10 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TableView fx:id="tvClients" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1270.0">
+      <TableView fx:id="tvClients" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1280.0" VBox.vgrow="ALWAYS">
          <columns>
             <TableColumn fx:id="tcClientName" prefWidth="190.0" text="Nombre" />
             <TableColumn fx:id="tcClientSurnames" minWidth="0.0" prefWidth="190.0" text="Apellidos" />
@@ -21,14 +20,14 @@
             <TableColumn fx:id="tcClientObservations" prefWidth="250.0" text="Observaciones" />
          </columns>
       </TableView>
-      <HBox prefHeight="100.0" prefWidth="1270.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="1280.0">
          <children>
             <Label text="Nombre:">
                <HBox.margin>
                   <Insets left="200.0" />
                </HBox.margin>
             </Label>
-            <TextField>
+            <TextField fx:id="txtClientBrowser" promptText="Buscar nombre">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
