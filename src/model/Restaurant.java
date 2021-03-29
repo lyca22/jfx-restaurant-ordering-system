@@ -659,9 +659,8 @@ public class Restaurant {
 
 	//Import methods.
 
-	public void importClientData(String fileName, String separator) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader("data/CLIENTS_DATA.csv"));
-
+	public void importClientData(String fileName, String separator, User user) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		String line = br.readLine();
 		while(line != null) {
 			String[] ClientsData = line.split(separator);
@@ -671,29 +670,23 @@ public class Restaurant {
 			String address = ClientsData[3];
 			BigInteger phoneNumber = new BigInteger(ClientsData[4]);
 			String observations = ClientsData[5];
-			addClient(name, surname, ID, address, phoneNumber, observations, actualUser);
+			addClient(name, surname, ID, address, phoneNumber, observations, user);
 			line = br.readLine();
-
 		}
-
 		br.close();
 	}
 
-	public void importProductData(String fileName, String separator) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader("data/PRODUCTS_DATA.csv"));
-
+	public void importProductData(String fileName, String separator, User user) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		String line = br.readLine();
 		while(line != null) {
 			String[] productsData = line.split(separator);
-
 			String name = productsData[0];
-
-			ProductType productType = new ProductType(productsData[1], null);
+			ProductType productType = new ProductType(productsData[1], user);
 			String[] ingredientList = productsData[2].split(",");
 			for (int i = 0; i < ingredientList.length; i++) {
-				addIngredient(ingredientList[i], actualUser);
+				addIngredient(ingredientList[i], user);
 			}
-
 			String productSizeTxt = productsData[3]; 
 			ProductSize productSize = ProductSize.Meal_Box_For_One;
 			switch(productSizeTxt) {
@@ -704,26 +697,19 @@ public class Restaurant {
 				productSize = ProductSize.Meal_Box_For_Two;
 				break;
 			}
-
 			int price = Integer.parseInt(productsData[4]);
-
-			addProduct(name, productType, ingredients, productSize, price, actualUser);
+			addProduct(name, productType, ingredients, productSize, price, user);
 			line = br.readLine();
-
 		}
-
 		br.close();
 	}
 
-	public void importOrderData(String fileName, String separator) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader("data/ORDER_DATA.csv"));
-
+	public void importOrderData(String fileName, String separator, User user) throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		String line = br.readLine();
 		while(line != null) {
 			String[] ordersData = line.split(separator);
-
 			int orderCode = Integer.parseInt(ordersData[0]);
-
 			String orderStateTxt = ordersData[1];
 			OrderState orderState = OrderState.Requested;
 			switch(orderStateTxt) {
@@ -740,13 +726,10 @@ public class Restaurant {
 				orderState = OrderState.Delivered;
 				break;
 			}
-
 			List<Product> products = new ArrayList<Product>();
-			String[] productsList = ordersData[2].split(",");
-
+			String[] productsList = ordersData[2].split(" ");
 			List<Integer> quantity = new ArrayList<Integer>();
-			String[] quantityList = ordersData[3].split(",");
-
+			String[] quantityList = ordersData[3].split(" ");
 			for (int i = 0; i < productsList.length; i++) {
 				Product productFound = searchProduct(productsList[i]);
 				if (productFound != null) {
@@ -754,25 +737,23 @@ public class Restaurant {
 					quantity.add(Integer.parseInt(quantityList[i]));
 				}
 			}
-
 			String[] clientNameAndSurname = ordersData[4].split(" ");
-			BigInteger bigInteger = new BigInteger("0");
-			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], 0, "", bigInteger, "", actualUser);
-
-			String[] employeeNameAndSurname = ordersData[5].split(" ");
-			Employee employee = addEmployee(employeeNameAndSurname[0], employeeNameAndSurname[1], 0);
-
-			String[] dateInfo = ordersData[6].split("-");
+			int ID = Integer.parseInt(ordersData[5]);
+			String address = ordersData[6];
+			BigInteger bigInteger = new BigInteger(ordersData[7]);
+			String obs = ordersData[8];
+			Client client = addClient(clientNameAndSurname[0], clientNameAndSurname[1], ID, address, bigInteger, obs, actualUser);
+			String[] employeeNameAndSurname = ordersData[9].split(" ");
+			int employeeID = Integer.parseInt(ordersData[10]);
+			Employee employee = addEmployee(employeeNameAndSurname[0], employeeNameAndSurname[1], employeeID);
+			String[] dateInfo = ordersData[11].split("-");
 			String[] dayAndTimeInfo = dateInfo[2].split(" ");
 			String[] timeInfo = dayAndTimeInfo[1].split(":");
 			LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateInfo[0]), Integer.parseInt(dateInfo[1]), Integer.parseInt(dayAndTimeInfo[0]), Integer.parseInt(timeInfo[0]), Integer.parseInt(timeInfo[1]), Integer.parseInt(timeInfo[2]));
-
-			String observations = ordersData[7];
-
-			addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, actualUser);
+			String observations = ordersData[12];
+			addOrder(orderCode, orderState, products, quantity, client, employee, date, observations, user);
 			line = br.readLine();
 		}
-
 		br.close();
 	}
 

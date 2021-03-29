@@ -1253,9 +1253,9 @@ public class RestaurantGUI {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Products Data");
 		File file = fileChooser.showOpenDialog(null);
-		String separator = ",";
+		String separator = ";";
 		try {
-			restaurant.importProductData(file.getAbsolutePath(), separator);
+			restaurant.importProductData(file.getAbsolutePath(), separator, restaurant.getActualUser());
 			initializeProductsTableView();
 		} catch (IOException e) {
 			System.out.println("IOException found");
@@ -1264,20 +1264,15 @@ public class RestaurantGUI {
 		} catch (NumberFormatException nfe) {
 			System.out.println("NF Exception found");
 		}
-		try {
-			restaurant.saveProducts();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void importClients() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Client Data");
 		File file = fileChooser.showOpenDialog(null);
-		String separator = ",";
+		String separator = ";";
 		try {
-			restaurant.importClientData(file.getAbsolutePath(), separator);
+			restaurant.importClientData(file.getAbsolutePath(), separator, restaurant.getActualUser());
 			initializeClientsTableView();
 		} catch (IOException e) {
 			System.out.println("IOException found");
@@ -1286,20 +1281,15 @@ public class RestaurantGUI {
 		} catch (NumberFormatException nfe) {
 			System.out.println("NF Exception found");
 		}
-		try {
-			restaurant.saveClients();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void importOrders() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Order Data");
 		File file = fileChooser.showOpenDialog(null);
-		String separator = ",";
+		String separator = ";";
 		try {
-			restaurant.importOrderData(file.getAbsolutePath(), separator);
+			restaurant.importOrderData(file.getAbsolutePath(), separator, restaurant.getActualUser());
 			initializeOrdersTableView();
 		} catch (IOException e) {
 			System.out.println("IOException found");
@@ -1307,11 +1297,6 @@ public class RestaurantGUI {
 			System.out.println("NP Exception found");
 		} catch (NumberFormatException nfe) {
 			System.out.println("NF Exception found");
-		}
-		try {
-			restaurant.saveOrders();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
