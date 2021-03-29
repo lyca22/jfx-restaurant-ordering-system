@@ -36,8 +36,8 @@
             <TextField fx:id="txtIngredientName" GridPane.columnIndex="1" />
             <Label text="Creado por:" GridPane.rowIndex="1" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="2" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="ingredientsCreated" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="ingredientsModified" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />

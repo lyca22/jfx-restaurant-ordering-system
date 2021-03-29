@@ -47,8 +47,8 @@
             <TextField fx:id="txtClientPhone" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Creado por:" GridPane.rowIndex="6" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="7" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label fx:id="clientsCreated" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label fx:id="clientsModified" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Apellido:" GridPane.rowIndex="1" />
             <Label text="Observaciones:" GridPane.rowIndex="5" />
             <TextField fx:id="txtClientObservations" GridPane.columnIndex="1" GridPane.rowIndex="5" />

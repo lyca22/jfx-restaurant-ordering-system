@@ -40,8 +40,8 @@
             <TextField fx:id="txtEmployeeSurname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Creado por:" GridPane.rowIndex="3" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="4" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="employeesCreated" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="employeesModified" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="ID:" GridPane.rowIndex="2" />
             <TextField fx:id="txtEmployeeID" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>

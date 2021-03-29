@@ -39,6 +39,7 @@ public class Restaurant {
 	private ArrayList<User> users;
 	private ArrayList<Order> orders;
 	private User actualUser;
+	private Order actualOrder;
 
 	public Restaurant(String name, String address) {
 		this.name = name;
@@ -450,16 +451,19 @@ public class Restaurant {
 		product.setProductSize(productSize);
 		product.setPrice(price);
 		product.setLastUserWhoModified(lastUserWhoModified);
+		sortProductByInsertion(products);
 	}
 
-	public void updateProductType(ProductType productType, String name, User userWhoCreated, User lastUserWhoModified) {
+	public void updateProductType(ProductType productType, String name, User lastUserWhoModified) {
 		productType.setName(name);
 		productType.setLastUserWhoModified(lastUserWhoModified);
+		Collections.sort(productTypes);
 	}
 
 	public void updateIngredient(Ingredient ingredient, String name, User lastUserWhoModified) {
 		ingredient.setName(name);
 		ingredient.setLastUserWhoModified(lastUserWhoModified);
+		sortIngredientBySelection(ingredients);
 	}
 
 	public void updateClient(Client client, String name, String surname, int ID, String address, BigInteger phoneNumber, String observations, User lastUserWhoModified) {
@@ -470,18 +474,22 @@ public class Restaurant {
 		client.setPhoneNumber(phoneNumber);
 		client.setObservations(observations);
 		client.setLastUserWhoModified(lastUserWhoModified);
+		sortClientBySurnameAndName();
 	}
 
 	public void updateEmployee(Employee employee, String name, String surname, int ID) {
 		employee.setName(name);
 		employee.setSurname(surname);
 		employee.setID(ID);
+		sortEmployeeBySurnameAndName();
 	}
 
 	public void updateUser(User user, String name, String surname, int iD, String username, String password) {
 		updateEmployee(user, name, surname, iD);
 		user.setUsername(username);
 		user.setPassword(password);
+		sortUserByUsername();
+		sortEmployeeBySurnameAndName();
 	}
 
 	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User lastUserWhoModified) {
@@ -493,6 +501,7 @@ public class Restaurant {
 		order.setDate(date);
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
+		Collections.sort(orders);
 	}
 
 	public void updateOrderState(Order order) {
@@ -936,6 +945,14 @@ public class Restaurant {
 			actualUser = user;
 		}
 		return canLogIn;
+	}
+
+	public Order getActualOrder() {
+		return actualOrder;
+	}
+
+	public void setActualOrder(Order actualOrder) {
+		this.actualOrder = actualOrder;
 	}
 
 }

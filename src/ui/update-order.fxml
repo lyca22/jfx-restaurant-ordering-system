@@ -48,8 +48,8 @@
             <Label text="Cliente:" GridPane.rowIndex="3" />
             <Label text="Creado por:" GridPane.rowIndex="8" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="9" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Label fx:id="ordersCreated" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="ordersModified" text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <content>
                   <VBox fx:id="vbOrderProducts" prefHeight="200.0" prefWidth="170.0">
@@ -59,7 +59,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <Button mnemonicParsing="false" text="Cambiar al siguiente estado" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#changeOrderStatus" text="Cambiar al siguiente estado" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <content>
                   <VBox fx:id="vbOrderClients" prefHeight="200.0" prefWidth="170.0">
