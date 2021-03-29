@@ -303,25 +303,25 @@ public class RestaurantGUI {
 
 	@FXML
 	private Label labelProductType;
-	
+
 	@FXML
 	private Label labelClient;
-	
+
 	@FXML
 	private Label labelEmployee;
-	
+
 	@FXML
 	private TextField txtOrderCode;
-	
+
 	@FXML
 	private DatePicker orderDatePicker;
-	
+
 	@FXML
 	private TextField orderHour;
 
 	@FXML
 	private TextField txtClientBrowser;
-	
+
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -396,20 +396,20 @@ public class RestaurantGUI {
 	private void initializeClientsTableView() {
 		ObservableList<model.Client> observableList;
 		observableList = FXCollections.observableArrayList(restaurant.getClients());
-		
+
 		FilteredList<Client> flClient = new FilteredList<Client>(observableList, p -> true);
 		tvClients.setItems(flClient);
 		txtClientBrowser.textProperty().addListener((obs, oldValue, newValue) -> {
 			flClient.setPredicate(p -> p.getName().toLowerCase().contains(newValue.toLowerCase().trim()));
 		});
-		
+
 		tcClientName.setCellValueFactory(new PropertyValueFactory<model.Client, String>("name"));
 		tcClientSurnames.setCellValueFactory(new PropertyValueFactory<model.Client, String>("surname"));
 		tcClientID.setCellValueFactory(new PropertyValueFactory<model.Client, String>("ID"));
 		tcClientAddress.setCellValueFactory(new PropertyValueFactory<model.Client, String>("address"));
 		tcClientPhone.setCellValueFactory(new PropertyValueFactory<model.Client, String>("phoneNumber"));
 		tcClientObservations.setCellValueFactory(new PropertyValueFactory<model.Client, String>("observations"));
-		
+
 		tcClientName.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcClientSurnames.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcClientID.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
@@ -425,7 +425,7 @@ public class RestaurantGUI {
 		tcEmployeeName.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("name"));
 		tcEmployeeSurname.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("surname"));
 		tcEmployeeID.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("ID"));
-		
+
 		tcEmployeeName.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcEmployeeSurname.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcEmployeeID.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
@@ -453,7 +453,7 @@ public class RestaurantGUI {
 		tcOrderEmployee.setCellValueFactory(new PropertyValueFactory<model.Order, String>("employeeAsString"));
 		tcOrderDate.setCellValueFactory(new PropertyValueFactory<model.Order, String>("date"));
 		tcOrderObservations.setCellValueFactory(new PropertyValueFactory<model.Order, String>("observations"));
-		
+
 		tcOrderCode.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcOrderStatus.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcOrderProducts.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
@@ -781,7 +781,7 @@ public class RestaurantGUI {
 		});
 		dialog.showAndWait();
 	}
-	
+
 	public void updateClients(Client client) {
 		ButtonType acceptButtonType = otherOpenWindow("add-client.fxml");
 		labelClient.setText("Modifica a este cliente:");
@@ -858,7 +858,7 @@ public class RestaurantGUI {
 		});
 		dialog.showAndWait();
 	}
-	
+
 	public void updateUsers() {
 		ButtonType acceptButtonType = otherOpenWindow("update-user.fxml");
 		txtUserName.setText(restaurant.getActualUser().getName());
@@ -996,7 +996,7 @@ public class RestaurantGUI {
 		String dateInString = order.getDate().format(formatter);
 		orderDatePicker.setValue(order.getDate().toLocalDate());
 		orderHour.setText(dateInString);
-		
+
 		txtOrderObservations.setText(order.getObservations());
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
@@ -1053,7 +1053,7 @@ public class RestaurantGUI {
 		});
 		dialog.showAndWait();
 	}
-	
+
 	public void importProducts() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Products Data");
