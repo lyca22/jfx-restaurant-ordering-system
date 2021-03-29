@@ -14,6 +14,10 @@
    <children>
       <MenuBar prefHeight="23.0" prefWidth="600.0" style="-fx-background-color: #F7DC6F;">
         <menus>
+            <Menu mnemonicParsing="false" text="Perfil">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#updateUsers" text="Modificar mis datos" />
+               </items></Menu>
           <Menu mnemonicParsing="false" text="Ver">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#viewProducts" text="Productos" />
@@ -52,7 +56,8 @@
             <Menu mnemonicParsing="false" text="Cerrar sesión">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#logOut" text="Cerrar sesión" />
-               </items></Menu>
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
       <GridPane fx:id="tablePane" VBox.vgrow="ALWAYS">

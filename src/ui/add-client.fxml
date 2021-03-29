@@ -11,7 +11,7 @@
 
 <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <header>
-      <Label alignment="CENTER" text="Añade un nuevo cliente:">
+      <Label fx:id="labelClient" alignment="CENTER" text="Añade un nuevo cliente:">
          <font>
             <Font size="14.0" />
          </font>

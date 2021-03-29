@@ -11,7 +11,7 @@
 
 <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <header>
-      <Label alignment="CENTER" text="Añade un nuevo tipo de producto:">
+      <Label fx:id="labelProductType" alignment="CENTER" text="Añade un nuevo tipo de producto:">
          <font>
             <Font size="14.0" />
          </font>
@@ -33,7 +33,7 @@
         </rowConstraints>
          <children>
             <Label text="Nombre:" />
-            <TextField fx:id="txtIngredientName" GridPane.columnIndex="1" />
+            <TextField fx:id="txtProductTypeName" GridPane.columnIndex="1" />
             <Label text="Creado por:" GridPane.rowIndex="1" />
             <Label text="Modificado por última vez:" GridPane.rowIndex="2" />
             <Label text="Usuario" GridPane.columnIndex="1" GridPane.rowIndex="1" />

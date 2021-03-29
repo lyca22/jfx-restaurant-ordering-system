@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +32,7 @@ import javafx.scene.layout.VBox;
 import model.Client;
 import model.Employee;
 import model.Ingredient;
+import model.Order;
 import model.OrderState;
 import model.Product;
 import model.ProductSize;
@@ -200,6 +202,9 @@ public class RestaurantGUI {
 	Dialog<String> dialog;
 
 	@FXML
+	private TextField txtProductTypeName;
+
+	@FXML
 	private TextField txtIngredientName;
 
 	@FXML
@@ -292,6 +297,27 @@ public class RestaurantGUI {
 	@FXML
 	private Label labelTitle;
 
+	@FXML
+	private Label labelIngredient;
+
+	@FXML
+	private Label labelProductType;
+	
+	@FXML
+	private Label labelClient;
+	
+	@FXML
+	private Label labelEmployee;
+	
+	@FXML
+	private TextField txtOrderCode;
+	
+	@FXML
+	private DatePicker orderDatePicker;
+	
+	@FXML
+	private TextField orderHour;
+
 	public RestaurantGUI(Restaurant restaurant) {
 		this.setRestaurant(restaurant);
 	}
@@ -340,6 +366,11 @@ public class RestaurantGUI {
 		tcProductSize.setCellValueFactory(new PropertyValueFactory<model.Product, String>("sizeAsString"));
 		tcProductPrice.setCellValueFactory(new PropertyValueFactory<model.Product, String>("price"));
 
+		tcProductName.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcProductType.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcProductIngredients.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcProductSize.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcProductPrice.setOnEditStart(t -> updateProduct(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	private void initializeProductTypeTableView() {
@@ -347,6 +378,7 @@ public class RestaurantGUI {
 		observableList = FXCollections.observableArrayList(restaurant.getProductTypes());
 		tvProductTypes.setItems(observableList);
 		tcProductTypeName.setCellValueFactory(new PropertyValueFactory<model.ProductType, String>("name"));
+		tcProductTypeName.setOnEditStart(t -> updateProductType(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	private void initializeIngredientsTableView() {
@@ -354,6 +386,7 @@ public class RestaurantGUI {
 		observableList = FXCollections.observableArrayList(restaurant.getIngredients());
 		tvIngredients.setItems(observableList);
 		tcIngredientName.setCellValueFactory(new PropertyValueFactory<model.Ingredient, String>("name"));
+		tcIngredientName.setOnEditStart(t -> updateIngredients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	private void initializeClientsTableView() {
@@ -366,6 +399,13 @@ public class RestaurantGUI {
 		tcClientAddress.setCellValueFactory(new PropertyValueFactory<model.Client, String>("address"));
 		tcClientPhone.setCellValueFactory(new PropertyValueFactory<model.Client, String>("phoneNumber"));
 		tcClientObservations.setCellValueFactory(new PropertyValueFactory<model.Client, String>("observations"));
+		
+		tcClientName.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcClientSurnames.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcClientID.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcClientAddress.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcClientPhone.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcClientObservations.setOnEditStart(t -> updateClients(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	private void initializeEmployeeTableView() {
@@ -375,6 +415,10 @@ public class RestaurantGUI {
 		tcEmployeeName.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("name"));
 		tcEmployeeSurname.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("surname"));
 		tcEmployeeID.setCellValueFactory(new PropertyValueFactory<model.Employee, String>("ID"));
+		
+		tcEmployeeName.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcEmployeeSurname.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcEmployeeID.setOnEditStart(t -> updateEmployees(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	private void initializeUsersTableView() {
@@ -399,6 +443,15 @@ public class RestaurantGUI {
 		tcOrderEmployee.setCellValueFactory(new PropertyValueFactory<model.Order, String>("employeeAsString"));
 		tcOrderDate.setCellValueFactory(new PropertyValueFactory<model.Order, String>("date"));
 		tcOrderObservations.setCellValueFactory(new PropertyValueFactory<model.Order, String>("observations"));
+		
+		tcOrderCode.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderStatus.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderProducts.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderQuantity.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderClient.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderEmployee.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderDate.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcOrderObservations.setOnEditStart(t -> updateOrders(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 
 	public void logIn() {
@@ -535,7 +588,64 @@ public class RestaurantGUI {
 					if(!productName.isEmpty()) {
 						restaurant.addProduct(productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
 						viewProducts();
-						System.out.println("Done");
+					}
+				}catch(NullPointerException npe) {
+					System.out.println("npe");
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	private void updateProduct(Product product) {
+		ButtonType acceptButtonType = openWindow("add-product.fxml");
+		labelProductType.setText("Modifica el producto:");
+		txtProductName.setText(product.getName());
+		for(ProductType i: restaurant.getProductTypes()) {
+			cbProductType.getItems().add(i.getName());
+		}
+		for(Ingredient i: restaurant.getIngredients()) {
+			CheckBox newCheckBox = new CheckBox();
+			newCheckBox.setText(i.getName());
+			vbProductIngredients.getChildren().add(newCheckBox);
+		}
+		cbProductSize.getItems().addAll("Caja personal", "Caja para dos");
+		txtProductPrice.setText(String.valueOf(product.getPrice()));
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				try {
+					String productName = txtProductName.getText();
+					ProductType productType = restaurant.searchProductType(cbProductType.getSelectionModel().getSelectedItem().toString());
+					CheckBox checkBox;
+					ArrayList<Ingredient> productIngredients = new ArrayList<>();
+					Ingredient ingredient;
+					for(int i = 0; i < vbProductIngredients.getChildren().size(); i++) {
+						if(vbProductIngredients.getChildren().get(i) instanceof CheckBox) {
+							checkBox = (CheckBox) vbProductIngredients.getChildren().get(i);
+							if (checkBox.isSelected()) {
+								ingredient = restaurant.searchIngredient(checkBox.getText());
+								if(ingredient != null) {
+									productIngredients.add(ingredient);
+								}
+							}
+						}
+					}
+					ProductSize productSize = ProductSize.Meal_Box_For_One;
+					switch (cbProductSize.getSelectionModel().getSelectedItem().toString()) {
+					case "Caja personal":
+						productSize = ProductSize.Meal_Box_For_One;
+						break;
+					case "Caja para dos":
+						productSize = ProductSize.Meal_Box_For_Two;
+						break;
+					}
+					int productPrice = Integer.parseInt(txtProductPrice.getText());
+					if(!productName.isEmpty()) {
+						restaurant.updateProduct(product, productName, productType, productIngredients, productSize, productPrice, restaurant.getActualUser());
+						viewProducts();
 					}
 				}catch(NullPointerException npe) {
 					System.out.println("npe");
@@ -552,9 +662,26 @@ public class RestaurantGUI {
 		ButtonType acceptButtonType = openWindow("add-productType.fxml");
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-				String productTypeName = txtIngredientName.getText();
+				String productTypeName = txtProductTypeName.getText();
 				if(!productTypeName.isEmpty()) {
 					restaurant.addProductType(productTypeName, restaurant.getActualUser());
+					viewProductTypes();
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void updateProductType(ProductType productType) {
+		ButtonType acceptButtonType = openWindow("add-productType.fxml");
+		labelProductType.setText("Modifica el tipo de producto:");
+		txtProductTypeName.setText(productType.getName());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String productTypeName = txtProductTypeName.getText();
+				if(!productTypeName.isEmpty()) {
+					restaurant.updateProductType(productType, productTypeName, restaurant.getActualUser(), null);
 					viewProductTypes();
 				}
 			}
@@ -578,6 +705,23 @@ public class RestaurantGUI {
 		dialog.showAndWait();
 	}
 
+	public void updateIngredients(Ingredient ingredient) {
+		ButtonType acceptButtonType = openWindow("add-ingredient.fxml");
+		labelIngredient.setText("Modifica este ingrediente:");
+		txtIngredientName.setText(ingredient.getName());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				String ingredientName = txtIngredientName.getText();
+				if(!ingredientName.isEmpty()) {
+					restaurant.updateIngredient(ingredient, ingredientName, restaurant.getActualUser());
+					viewIngredients();
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
 	public void addClients() {
 		ButtonType acceptButtonType = openWindow("add-client.fxml");
 		dialog.setResultConverter(dialogButton -> {
@@ -591,6 +735,37 @@ public class RestaurantGUI {
 					String clientObservations = txtClientObservations.getText();
 					if(!clientName.isEmpty() && !clientSurname.isEmpty() && !clientAddress.isEmpty()) {
 						restaurant.addClient(clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
+						viewClients();
+					}
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+	
+	public void updateClients(Client client) {
+		ButtonType acceptButtonType = openWindow("add-client.fxml");
+		labelClient.setText("Modifica a este cliente:");
+		txtClientName.setText(client.getName());
+		txtClientSurname.setText(client.getSurname());
+		txtClientID.setText(String.valueOf(client.getID()));
+		txtClientAddress.setText(client.getAddress());
+		txtClientPhone.setText(String.valueOf(client.getPhoneNumber()));
+		txtClientObservations.setText(client.getObservations());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				try {
+					String clientName = txtClientName.getText();
+					String clientSurname = txtClientSurname.getText();
+					int clientID = Integer.parseInt(txtClientID.getText());
+					String clientAddress = txtClientAddress.getText();
+					BigInteger clientPhone = new BigInteger(txtClientPhone.getText());
+					String clientObservations = txtClientObservations.getText();
+					if(!clientName.isEmpty() && !clientSurname.isEmpty() && !clientAddress.isEmpty()) {
+						restaurant.updateClient(client, clientName, clientSurname, clientID, clientAddress, clientPhone, clientObservations, restaurant.getActualUser());
 						viewClients();
 					}
 				}catch(NumberFormatException nfe) {
@@ -623,6 +798,31 @@ public class RestaurantGUI {
 		dialog.showAndWait();
 	}
 
+	public void updateEmployees(Employee employee) {
+		ButtonType acceptButtonType = openWindow("add-employee.fxml");
+		labelEmployee.setText("Modifica a este empleado:");
+		txtEmployeeName.setText(employee.getName());
+		txtEmployeeSurname.setText(employee.getSurname());
+		txtEmployeeID.setText(String.valueOf(employee.getID()));
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				try {
+					String employeeName = txtEmployeeName.getText();
+					String employeeSurname = txtEmployeeSurname.getText();
+					int employeeID = Integer.parseInt(txtEmployeeID.getText());
+					if(!employeeName.isEmpty() && !employeeSurname.isEmpty()) {
+						restaurant.updateEmployee(employee, employeeName, employeeSurname, employeeID);
+						viewEmployees();
+					}
+				}catch(NumberFormatException nfe) {
+					System.out.println("nfe");
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+	
 	public void updateUsers() {
 		ButtonType acceptButtonType = openWindow("update-user.fxml");
 		txtUserName.setText(restaurant.getActualUser().getName());
@@ -645,7 +845,7 @@ public class RestaurantGUI {
 				}catch(NumberFormatException nfe) {
 					System.out.println("nfe");
 				}
-				
+
 			}
 			return null;
 		});
@@ -679,57 +879,145 @@ public class RestaurantGUI {
 		}
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == acceptButtonType) {
-					HBox hbox;
-					Label label;
-					TextField textField;
-					ArrayList<Product> orderProducts = new ArrayList<>();
-					ArrayList<Integer> orderProductQuantity = new ArrayList<>();
-					Product product;
-					for(int i = 0; i < vbOrderProducts.getChildren().size(); i++) {
-						hbox = (HBox) vbOrderProducts.getChildren().get(i);
-						for(int j = 0; j < hbox.getChildren().size(); j++) {
-							if(hbox.getChildren().get(j) instanceof TextField) {
-								label = (Label) hbox.getChildren().get(j-1);
-								textField = (TextField) hbox.getChildren().get(j);
-								product = restaurant.searchProduct(label.getText());
-								if(product != null && Integer.parseInt(textField.getText()) > 0) {
-									orderProducts.add(product);
-									orderProductQuantity.add(Integer.parseInt(textField.getText()));
-								}
+				HBox hbox;
+				Label label;
+				TextField textField;
+				ArrayList<Product> orderProducts = new ArrayList<>();
+				ArrayList<Integer> orderProductQuantity = new ArrayList<>();
+				Product product;
+				for(int i = 0; i < vbOrderProducts.getChildren().size(); i++) {
+					hbox = (HBox) vbOrderProducts.getChildren().get(i);
+					for(int j = 0; j < hbox.getChildren().size(); j++) {
+						if(hbox.getChildren().get(j) instanceof TextField) {
+							label = (Label) hbox.getChildren().get(j-1);
+							textField = (TextField) hbox.getChildren().get(j);
+							product = restaurant.searchProduct(label.getText());
+							if(product != null && Integer.parseInt(textField.getText()) > 0) {
+								orderProducts.add(product);
+								orderProductQuantity.add(Integer.parseInt(textField.getText()));
 							}
 						}
 					}
-					RadioButton radioButton;
-					Client client = null;
-					for(int i = 0; i < vbOrderClients.getChildren().size(); i++) {
-						if(vbOrderClients.getChildren().get(i) instanceof RadioButton) {
-							radioButton = (RadioButton) vbOrderClients.getChildren().get(i);
-							if (radioButton.isSelected()) {
-								client = restaurant.searchClient(radioButton.getText());
-							}
+				}
+				RadioButton radioButton;
+				Client client = null;
+				for(int i = 0; i < vbOrderClients.getChildren().size(); i++) {
+					if(vbOrderClients.getChildren().get(i) instanceof RadioButton) {
+						radioButton = (RadioButton) vbOrderClients.getChildren().get(i);
+						if (radioButton.isSelected()) {
+							client = restaurant.searchClient(radioButton.getText());
 						}
 					}
-					Employee employee = null;
-					for(int i = 0; i < vbOrderEmployee.getChildren().size(); i++) {
-						if(vbOrderEmployee.getChildren().get(i) instanceof RadioButton) {
-							radioButton = (RadioButton) vbOrderEmployee.getChildren().get(i);
-							if (radioButton.isSelected()) {
-								employee = restaurant.searchEmployee(radioButton.getText());
-							}
+				}
+				Employee employee = null;
+				for(int i = 0; i < vbOrderEmployee.getChildren().size(); i++) {
+					if(vbOrderEmployee.getChildren().get(i) instanceof RadioButton) {
+						radioButton = (RadioButton) vbOrderEmployee.getChildren().get(i);
+						if (radioButton.isSelected()) {
+							employee = restaurant.searchEmployee(radioButton.getText());
 						}
 					}
-					LocalDateTime date = LocalDateTime.now();
-					String observations = txtOrderObservations.getText();
-					if(!orderProducts.isEmpty() && client != null && employee != null) {
-						restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
-						viewOrders();
-					}
+				}
+				LocalDateTime date = LocalDateTime.now();
+				String observations = txtOrderObservations.getText();
+				if(!orderProducts.isEmpty() && client != null && employee != null) {
+					restaurant.addOrder(OrderState.Requested, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					viewOrders();
+				}
 			}
 			return null;
 		});
 		dialog.showAndWait();
 	}
 
+	public void updateOrders(Order order) {
+		ButtonType acceptButtonType = openWindow("update-order.fxml");
+		txtOrderCode.setText(String.valueOf(order.getOrderCode()));
+		for(Product i: restaurant.getProducts()) {
+			HBox newHBox = new HBox();
+			Label newLabel = new Label();
+			newLabel.setText(i.getName());
+			TextField newTextField = new TextField();
+			newTextField.setText("0");
+			newHBox.getChildren().addAll(newLabel, newTextField);
+			vbOrderProducts.getChildren().add(newHBox);
+		}
+		ToggleGroup clientToggleGroup = new ToggleGroup();
+		for(Client i: restaurant.getClients()) {
+			RadioButton newRadioButton = new RadioButton();
+			newRadioButton.setText(i.getName());
+			clientToggleGroup.getToggles().add(newRadioButton);
+			vbOrderClients.getChildren().add(newRadioButton);
+		}
+		ToggleGroup employeeToggleGroup = new ToggleGroup();
+		for(Employee i: restaurant.getEmployees()) {
+			RadioButton newRadioButton = new RadioButton();
+			newRadioButton.setText(i.getName());
+			employeeToggleGroup.getToggles().add(newRadioButton);
+			vbOrderEmployee.getChildren().add(newRadioButton);
+		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String dateInString = order.getDate().format(formatter);
+		orderDatePicker.setValue(order.getDate().toLocalDate());
+		orderHour.setText(dateInString);
+		
+		txtOrderObservations.setText(order.getObservations());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == acceptButtonType) {
+				HBox hbox;
+				Label label;
+				TextField textField;
+				ArrayList<Product> orderProducts = new ArrayList<>();
+				ArrayList<Integer> orderProductQuantity = new ArrayList<>();
+				Product product;
+				int orderCode = Integer.parseInt(txtOrderCode.getText());
+				for(int i = 0; i < vbOrderProducts.getChildren().size(); i++) {
+					hbox = (HBox) vbOrderProducts.getChildren().get(i);
+					for(int j = 0; j < hbox.getChildren().size(); j++) {
+						if(hbox.getChildren().get(j) instanceof TextField) {
+							label = (Label) hbox.getChildren().get(j-1);
+							textField = (TextField) hbox.getChildren().get(j);
+							product = restaurant.searchProduct(label.getText());
+							if(product != null && Integer.parseInt(textField.getText()) > 0) {
+								orderProducts.add(product);
+								orderProductQuantity.add(Integer.parseInt(textField.getText()));
+							}
+						}
+					}
+				}
+				RadioButton radioButton;
+				Client client = null;
+				for(int i = 0; i < vbOrderClients.getChildren().size(); i++) {
+					if(vbOrderClients.getChildren().get(i) instanceof RadioButton) {
+						radioButton = (RadioButton) vbOrderClients.getChildren().get(i);
+						if (radioButton.isSelected()) {
+							client = restaurant.searchClient(radioButton.getText());
+						}
+					}
+				}
+				Employee employee = null;
+				for(int i = 0; i < vbOrderEmployee.getChildren().size(); i++) {
+					if(vbOrderEmployee.getChildren().get(i) instanceof RadioButton) {
+						radioButton = (RadioButton) vbOrderEmployee.getChildren().get(i);
+						if (radioButton.isSelected()) {
+							employee = restaurant.searchEmployee(radioButton.getText());
+						}
+					}
+				}
+				String orderDate[] = orderDatePicker.getValue().toString().split("-");
+				String hour[] = orderHour.getText().split(":");
+				LocalDateTime date = LocalDateTime.of(Integer.parseInt(orderDate[0]), Integer.parseInt(orderDate[1]), Integer.parseInt(orderDate[2]), Integer.parseInt(hour[0]), Integer.parseInt(hour[1]), Integer.parseInt(hour[2]));
+				String observations = txtOrderObservations.getText();
+				if(!orderProducts.isEmpty() && client != null && employee != null) {
+					restaurant.updateOrder(order, orderCode, orderProducts, orderProductQuantity, client, employee, date, observations, restaurant.getActualUser());
+					viewOrders();
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+	
 	public void importProducts() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import Products Data");
@@ -859,7 +1147,7 @@ public class RestaurantGUI {
 				String fileName = txtFileExportOrder.getText()+".txt";
 				String separator = txtSeparator.getText();
 				String[] min = DpMInDate.getValue().toString().split("-");
-				String[] max = DpMaxDate.getValue().toString().split("-"); 
+				String[] max = DpMaxDate.getValue().toString().split("-");
 				String [] minHour = txtMinHour.getText().split(":");
 				String [] maxHour = txtMaxHour.getText().split(":");
 

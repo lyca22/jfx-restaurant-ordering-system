@@ -448,7 +448,7 @@ public class Restaurant {
 		product.setProductType(productType);
 		product.setIngredients(ingredients);
 		product.setProductSize(productSize);
-		product.setProductSize(productSize);
+		product.setPrice(price);
 		product.setLastUserWhoModified(lastUserWhoModified);
 	}
 
@@ -484,12 +484,13 @@ public class Restaurant {
 		user.setPassword(password);
 	}
 
-	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, String observations, User lastUserWhoModified) {
+	public void updateOrder(Order order, int orderCode, List<Product> products, List<Integer> quantity, Client client, Employee employeeWhoDelivered, LocalDateTime date, String observations, User lastUserWhoModified) {
 		order.setOrderCode(orderCode);
 		order.setProducts(products);
 		order.setQuantity(quantity);
 		order.setClient(client);
 		order.setEmployeeWhoDelivered(employeeWhoDelivered);
+		order.setDate(date);
 		order.setObservations(observations);
 		order.setLastUserWhoModified(lastUserWhoModified);
 	}
