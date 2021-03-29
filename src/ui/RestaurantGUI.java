@@ -555,6 +555,27 @@ public class RestaurantGUI {
 		return acceptButtonType;
 	}
 
+	
+	public ButtonType otherOpenWindow(String resource) {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+		fxmlLoader.setController(this);
+		dialog = new Dialog<String>();
+		ButtonType acceptButtonType = new ButtonType("Aceptar", ButtonData.APPLY);
+		ButtonType cancelButtonType = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
+		ButtonType deleteButtonType = new ButtonType("Borrar", ButtonData.NO);
+		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType, deleteButtonType);
+		Parent root;
+		try {
+			root = fxmlLoader.load();
+			dialog.getDialogPane().setContent(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return acceptButtonType;
+	}
+	
+	
+	//Methods products
 	public void addProducts() {
 		ButtonType acceptButtonType = openWindow("add-product.fxml");
 		for(ProductType i: restaurant.getProductTypes()) {
@@ -611,7 +632,7 @@ public class RestaurantGUI {
 	}
 
 	private void updateProduct(Product product) {
-		ButtonType acceptButtonType = openWindow("add-product.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("add-product.fxml");
 		labelProductType.setText("Modifica el producto:");
 		txtProductName.setText(product.getName());
 		for(ProductType i: restaurant.getProductTypes()) {
@@ -668,6 +689,9 @@ public class RestaurantGUI {
 		dialog.showAndWait();
 	}
 
+	
+	
+	//Methods product type
 	public void addProductType() {
 		ButtonType acceptButtonType = openWindow("add-productType.fxml");
 		dialog.setResultConverter(dialogButton -> {
@@ -684,7 +708,7 @@ public class RestaurantGUI {
 	}
 
 	public void updateProductType(ProductType productType) {
-		ButtonType acceptButtonType = openWindow("add-productType.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("add-productType.fxml");
 		labelProductType.setText("Modifica el tipo de producto:");
 		txtProductTypeName.setText(productType.getName());
 		dialog.setResultConverter(dialogButton -> {
@@ -715,8 +739,10 @@ public class RestaurantGUI {
 		dialog.showAndWait();
 	}
 
+	
+	//Methods ingredients
 	public void updateIngredients(Ingredient ingredient) {
-		ButtonType acceptButtonType = openWindow("add-ingredient.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("add-ingredient.fxml");
 		labelIngredient.setText("Modifica este ingrediente:");
 		txtIngredientName.setText(ingredient.getName());
 		dialog.setResultConverter(dialogButton -> {
@@ -757,7 +783,7 @@ public class RestaurantGUI {
 	}
 	
 	public void updateClients(Client client) {
-		ButtonType acceptButtonType = openWindow("add-client.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("add-client.fxml");
 		labelClient.setText("Modifica a este cliente:");
 		txtClientName.setText(client.getName());
 		txtClientSurname.setText(client.getSurname());
@@ -809,7 +835,7 @@ public class RestaurantGUI {
 	}
 
 	public void updateEmployees(Employee employee) {
-		ButtonType acceptButtonType = openWindow("add-employee.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("add-employee.fxml");
 		labelEmployee.setText("Modifica a este empleado:");
 		txtEmployeeName.setText(employee.getName());
 		txtEmployeeSurname.setText(employee.getSurname());
@@ -834,7 +860,7 @@ public class RestaurantGUI {
 	}
 	
 	public void updateUsers() {
-		ButtonType acceptButtonType = openWindow("update-user.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("update-user.fxml");
 		txtUserName.setText(restaurant.getActualUser().getName());
 		txtUserSurname.setText(restaurant.getActualUser().getSurname());
 		txtUserID.setText(String.valueOf(restaurant.getActualUser().getID()));
@@ -941,7 +967,7 @@ public class RestaurantGUI {
 	}
 
 	public void updateOrders(Order order) {
-		ButtonType acceptButtonType = openWindow("update-order.fxml");
+		ButtonType acceptButtonType = otherOpenWindow("update-order.fxml");
 		txtOrderCode.setText(String.valueOf(order.getOrderCode()));
 		for(Product i: restaurant.getProducts()) {
 			HBox newHBox = new HBox();
